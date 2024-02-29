@@ -36,17 +36,13 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.queryEditor = new ScintillaNET.Scintilla();
-            this.resultEditor = new ScintillaNET.Scintilla();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.rowsCountLabel = new System.Windows.Forms.Label();
-            this.cmbResultDisplayTypes = new System.Windows.Forms.ComboBox();
+            this.resultsTabControl = new Neo4JHTTPBrowser.Controls.QueryResultTabControl();
             this.statusStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -112,8 +108,7 @@
             // 
             // splitContainer.Panel2
             // 
-            this.splitContainer.Panel2.Controls.Add(this.resultEditor);
-            this.splitContainer.Panel2.Controls.Add(this.panel2);
+            this.splitContainer.Panel2.Controls.Add(this.resultsTabControl);
             this.splitContainer.Size = new System.Drawing.Size(500, 478);
             this.splitContainer.SplitterDistance = 250;
             this.splitContainer.TabIndex = 2;
@@ -128,48 +123,14 @@
             this.queryEditor.TabIndex = 0;
             this.queryEditor.WrapMode = ScintillaNET.WrapMode.Word;
             // 
-            // resultEditor
+            // resultsTabControl
             // 
-            this.resultEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resultEditor.Lexer = ScintillaNET.Lexer.Json;
-            this.resultEditor.Location = new System.Drawing.Point(0, 27);
-            this.resultEditor.Name = "resultEditor";
-            this.resultEditor.Size = new System.Drawing.Size(500, 197);
-            this.resultEditor.TabIndex = 1;
-            this.resultEditor.WrapMode = ScintillaNET.WrapMode.Word;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.rowsCountLabel);
-            this.panel2.Controls.Add(this.cmbResultDisplayTypes);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 4);
-            this.panel2.Size = new System.Drawing.Size(500, 27);
-            this.panel2.TabIndex = 0;
-            // 
-            // rowsCountLabel
-            // 
-            this.rowsCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rowsCountLabel.Location = new System.Drawing.Point(0, 0);
-            this.rowsCountLabel.Name = "rowsCountLabel";
-            this.rowsCountLabel.Size = new System.Drawing.Size(379, 23);
-            this.rowsCountLabel.TabIndex = 1;
-            this.rowsCountLabel.Text = "Found 1 row(s).";
-            this.rowsCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cmbResultDisplayTypes
-            // 
-            this.cmbResultDisplayTypes.Dock = System.Windows.Forms.DockStyle.Right;
-            this.cmbResultDisplayTypes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbResultDisplayTypes.FormattingEnabled = true;
-            this.cmbResultDisplayTypes.Items.AddRange(new object[] {
-            "JSON"});
-            this.cmbResultDisplayTypes.Location = new System.Drawing.Point(379, 0);
-            this.cmbResultDisplayTypes.Name = "cmbResultDisplayTypes";
-            this.cmbResultDisplayTypes.Size = new System.Drawing.Size(121, 23);
-            this.cmbResultDisplayTypes.TabIndex = 0;
+            this.resultsTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.resultsTabControl.Location = new System.Drawing.Point(0, 0);
+            this.resultsTabControl.Name = "resultsTabControl";
+            this.resultsTabControl.SelectedIndex = 0;
+            this.resultsTabControl.Size = new System.Drawing.Size(500, 224);
+            this.resultsTabControl.TabIndex = 0;
             // 
             // QueryTabView
             // 
@@ -187,7 +148,6 @@
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,9 +163,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.SplitContainer splitContainer;
         private ScintillaNET.Scintilla queryEditor;
-        private ScintillaNET.Scintilla resultEditor;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.ComboBox cmbResultDisplayTypes;
-        private System.Windows.Forms.Label rowsCountLabel;
+        private QueryResultTabControl resultsTabControl;
     }
 }

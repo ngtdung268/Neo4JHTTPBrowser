@@ -1,17 +1,13 @@
 ﻿using Neo4JHttpBrowser;
 using Neo4JHttpBrowser.DTOs;
 using Neo4JHttpBrowser.Helpers;
-using Newtonsoft.Json;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Neo4JHTTPBrowser.Controls
@@ -48,10 +44,6 @@ namespace Neo4JHTTPBrowser.Controls
 
             SetupQueryEditor();
 
-            SetupResultEditor();
-
-            cmbResultDisplayTypes.SelectedIndex = 0;
-
             ResetExecutionLabels("Ready");
         }
 
@@ -64,24 +56,37 @@ namespace Neo4JHTTPBrowser.Controls
 
         public void ExecuteQuery()
         {
-            var statement = queryEditor.Text.Trim();
-            if (statement.Length == 0)
+            var inputText = queryEditor.Text.Trim();
+            if (inputText.Length == 0)
             {
                 return;
             }
 
-            statement = Neo4JHelper.ExcludeComments(statement);
+            inputText = Neo4JHelper.RemoveComments(inputText);
 
-            var payload = new QueryRequestDTO
+            var payload = new QueryRequestDTO { Statements = new List<QueryRequestDTO.StatementDTO>() };
+            var lines = inputText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            var statement = string.Empty;
+
+            foreach (var line in lines)
             {
-                Statements = new List<QueryRequestDTO.StatementDTO>
+                statement += line.Trim();
+
+                if (statement.EndsWith(";"))
                 {
-                    new QueryRequestDTO.StatementDTO
-                    {
-                        Statement = statement,
-                    }
+                    payload.Statements.Add(new QueryRequestDTO.StatementDTO { Statement = statement });
+                    statement = string.Empty;
                 }
-            };
+                else
+                {
+                    statement += Environment.NewLine;
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(statement))
+            {
+                payload.Statements.Add(new QueryRequestDTO.StatementDTO { Statement = statement });
+            }
 
             if (!executionWorker.IsBusy)
             {
@@ -105,31 +110,18 @@ namespace Neo4JHTTPBrowser.Controls
         {
             var (response, elapsed) = e.Result as Tuple<QueryResponseDTO, TimeSpan>;
 
-            resultEditor.ReadOnly = false;
+            resultsTabControl.ShowResult(response);
+
+            if (response.Errors != null && response.Errors.Any())
             {
-                if (response.Errors != null && response.Errors.Any())
-                {
-                    resultEditor.Text = Neo4JHelper.GetErrorText(response);
-                    statusLabel.Text = "Query completed with errors";
-                    statusLabel.ForeColor = Color.Red;
-                }
-                else if (response.Results != null && response.Results.Any())
-                {
-                    // We only support executing 1 query per editor for now.
-                    var rows = Neo4JHelper.GetRows(response.Results.First());
-                    resultEditor.Text = SerializeResultRows(rows);
-
-                    var rowsCount = response.Results?.FirstOrDefault().Data?.Count;
-                    if (rowsCount != null)
-                    {
-                        rowsCountLabel.Text = $"Found {rowsCount} row(s).";
-                    }
-
-                    statusLabel.Text = "Query executed successfully";
-                    statusLabel.ForeColor = Color.Green;
-                }
+                statusLabel.Text = "Query completed with errors";
+                statusLabel.ForeColor = Color.Red;
             }
-            resultEditor.ReadOnly = true;
+            else
+            {
+                statusLabel.Text = "Query executed successfully";
+                statusLabel.ForeColor = Color.Green;
+            }
 
             elapsedDelimiterLabel.Text = "|";
             elapsedLabel.Text = elapsed.ToString("g");
@@ -137,35 +129,13 @@ namespace Neo4JHTTPBrowser.Controls
 
         private void ResetExecutionLabels(string message)
         {
-            // In ReadOnly mode, Scintilla does not allow to set a Text value.
-            resultEditor.ReadOnly = false;
-            resultEditor.Text = string.Empty;
-            resultEditor.ReadOnly = true;
+            resultsTabControl.ResetDisplay();
 
             statusLabel.Text = message;
             statusLabel.ForeColor = SystemColors.ControlText;
 
-            rowsCountLabel.Text = string.Empty;
-
             elapsedLabel.Text = string.Empty;
             elapsedDelimiterLabel.Text = string.Empty;
-        }
-
-        private static string SerializeResultRows(IEnumerable<Dictionary<string, object>> rows)
-        {
-            var sb = new StringBuilder(256);
-            var sw = new StringWriter(sb, CultureInfo.InvariantCulture);
-            var serializer = JsonSerializer.CreateDefault();
-
-            using (var writer = new JsonTextWriter(sw))
-            {
-                writer.Formatting = Formatting.Indented;
-                writer.IndentChar = ' ';
-                writer.Indentation = 4;
-                serializer.Serialize(writer, rows);
-            }
-
-            return sw.ToString();
         }
 
         private void SetupQueryEditor()
@@ -210,62 +180,6 @@ namespace Neo4JHTTPBrowser.Controls
             margin.Width = 20;
             margin.Type = MarginType.Number;
             margin.Sensitive = true;
-        }
-
-        private void SetupResultEditor()
-        {
-            resultEditor.CaretLineVisible = true;
-            resultEditor.CaretLineBackColor = Color.FromArgb(232, 232, 255);
-
-            // Configure the default styles.
-            resultEditor.StyleResetDefault();
-            resultEditor.Styles[Style.Default].Font = "Consolas";
-            resultEditor.Styles[Style.Default].Size = 10;
-            resultEditor.Styles[Style.Default].BackColor = Color.White;
-            resultEditor.Styles[Style.Default].ForeColor = Color.Black;
-            resultEditor.StyleClearAll();
-
-            // Configure the JSON lexer styles.
-            resultEditor.Lexer = Lexer.Json;
-
-            resultEditor.Styles[Style.Json.Default].ForeColor = Color.Silver;
-            resultEditor.Styles[Style.Json.BlockComment].ForeColor = Color.FromArgb(0, 128, 0); // Green
-            resultEditor.Styles[Style.Json.LineComment].ForeColor = Color.FromArgb(0, 128, 0);  // Green
-            resultEditor.Styles[Style.Json.Number].ForeColor = Color.Olive;
-            resultEditor.Styles[Style.Json.PropertyName].ForeColor = Color.Blue;
-            resultEditor.Styles[Style.Json.String].ForeColor = Color.FromArgb(163, 21, 21);     // Red
-            resultEditor.Styles[Style.Json.StringEol].BackColor = Color.Pink;
-            resultEditor.Styles[Style.Json.Operator].ForeColor = Color.Purple;
-
-            // Enable code folding.
-            resultEditor.SetProperty("fold", "1");
-            resultEditor.SetProperty("fold.compact", "1");
-
-            // Configure a margin to display folding symbols.
-            resultEditor.Margins[3].Type = MarginType.Symbol;
-            resultEditor.Margins[3].Mask = Marker.MaskFolders;
-            resultEditor.Margins[3].Sensitive = true;
-            resultEditor.Margins[3].Width = 20;
-            resultEditor.SetFoldMarginHighlightColor(true, Color.Silver);
-
-            // Set colors for all folding markers.
-            for (int i = 25; i < 31; i++)
-            {
-                resultEditor.Markers[i].SetForeColor(Color.White);
-                resultEditor.Markers[i].SetBackColor(Color.FromArgb(41, 57, 85));
-            }
-
-            // Configure folding markers with respective symbols.
-            resultEditor.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
-            resultEditor.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
-            resultEditor.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
-            resultEditor.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
-            resultEditor.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
-            resultEditor.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
-            resultEditor.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
-
-            // Enable automatic folding.
-            resultEditor.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
         }
     }
 }

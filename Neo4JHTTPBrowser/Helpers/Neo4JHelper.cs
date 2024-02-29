@@ -24,7 +24,7 @@ namespace Neo4JHttpBrowser.Helpers
             @"@('[^']*')+"
         });
 
-        public static string ExcludeComments(string statement)
+        public static string RemoveComments(string statement)
         {
             return Regex
                 .Replace(

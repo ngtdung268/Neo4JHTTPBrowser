@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>neo4j.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
@@ -110,6 +113,15 @@
     <Compile Include="Controls\EmptyTreeNode.cs" />
     <Compile Include="Controls\NodeLabelTreeNode.cs" />
     <Compile Include="Controls\ProcedureTreeNode.cs" />
+    <Compile Include="Controls\QueryJsonResultTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\QueryResultTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\QueryResultTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\QueryTabPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -170,6 +182,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="neo4j.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
