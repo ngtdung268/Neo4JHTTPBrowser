@@ -200,8 +200,10 @@ namespace Neo4JHTTPBrowser.Controls
             queryEditor.Styles[Style.Sql.Character].ForeColor = Color.Red;
             queryEditor.Styles[Style.Sql.Operator].ForeColor = Color.Black;
 
-            queryEditor.SetKeywords(0, string.Join(" ", Neo4JHelper.ReservedKeywords.Clauses.Concat(Neo4JHelper.ReservedKeywords.SubClauses)).ToLowerInvariant());
-            queryEditor.SetKeywords(1, string.Join(" ", Neo4JHelper.ReservedKeywords.Modifiers.Concat(Neo4JHelper.ReservedKeywords.Expressions).Concat(Neo4JHelper.ReservedKeywords.Operators).Concat(Neo4JHelper.ReservedKeywords.Schema).Concat(Neo4JHelper.ReservedKeywords.Hints).Concat(Neo4JHelper.ReservedKeywords.Literals).Concat(Neo4JHelper.ReservedKeywords.FutureUse)).ToLowerInvariant());
+            queryEditor.SetKeywords(0, string.Join(" ", Neo4JHelper.ReservedKeywords.Clauses.Concat(Neo4JHelper.ReservedKeywords.SubClauses).Concat(Neo4JHelper.ReservedKeywords.Schema).Concat(Neo4JHelper.ReservedKeywords.Hints)).ToLowerInvariant());
+            queryEditor.SetKeywords(1, string.Join(" ", Neo4JHelper.ReservedKeywords.Modifiers.Concat(Neo4JHelper.ReservedKeywords.Expressions)).ToLowerInvariant());
+            queryEditor.SetKeywords(4, string.Join(" ", Neo4JHelper.ReservedKeywords.Operators.Concat(Neo4JHelper.ReservedKeywords.FutureUse)).ToLowerInvariant());
+            queryEditor.SetKeywords(5, string.Join(" ", Neo4JHelper.ReservedKeywords.Literals).ToLowerInvariant());
 
             // Show line numbers.
             var margin = queryEditor.Margins[0];
@@ -216,12 +218,12 @@ namespace Neo4JHTTPBrowser.Controls
             resultEditor.CaretLineBackColor = Color.FromArgb(232, 232, 255);
 
             // Configure the default styles.
-            queryEditor.StyleResetDefault();
-            queryEditor.Styles[Style.Default].Font = "Consolas";
-            queryEditor.Styles[Style.Default].Size = 10;
-            queryEditor.Styles[Style.Default].BackColor = Color.White;
-            queryEditor.Styles[Style.Default].ForeColor = Color.Black;
-            queryEditor.StyleClearAll();
+            resultEditor.StyleResetDefault();
+            resultEditor.Styles[Style.Default].Font = "Consolas";
+            resultEditor.Styles[Style.Default].Size = 10;
+            resultEditor.Styles[Style.Default].BackColor = Color.White;
+            resultEditor.Styles[Style.Default].ForeColor = Color.Black;
+            resultEditor.StyleClearAll();
 
             // Configure the JSON lexer styles.
             resultEditor.Lexer = Lexer.Json;
