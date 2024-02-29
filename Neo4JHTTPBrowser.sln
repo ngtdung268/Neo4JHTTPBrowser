@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo4JHTTPBrowser", "Neo4JHTTPBrowser\Neo4JHttpBrowser.csproj", "{2F8E1FC9-2380-4B62-98F7-85B67335473E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F8E1FC9-2380-4B62-98F7-85B67335473E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F8E1FC9-2380-4B62-98F7-85B67335473E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F8E1FC9-2380-4B62-98F7-85B67335473E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F8E1FC9-2380-4B62-98F7-85B67335473E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {888A24AE-9F69-4577-BA06-C206C1A47F17}
+	EndGlobalSection
+EndGlobal
