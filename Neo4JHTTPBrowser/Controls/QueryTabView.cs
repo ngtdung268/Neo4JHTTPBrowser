@@ -56,7 +56,11 @@ namespace Neo4JHTTPBrowser.Controls
 
         public void ExecuteQuery()
         {
-            var inputText = queryEditor.Text.Trim();
+            var inputText = queryEditor.SelectedText.Trim();
+            if (inputText.Length == 0)
+            {
+                inputText = queryEditor.Text.Trim();
+            }
             if (inputText.Length == 0)
             {
                 return;

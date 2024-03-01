@@ -26,6 +26,15 @@ namespace Neo4JHttpBrowser.Helpers
 
         public static string RemoveComments(string statement)
         {
+            if (statement == null)
+            {
+                throw new ArgumentNullException(nameof(statement));
+            }
+
+            // Ensure statement is ended with a new line.
+            // It's a trick to make "line comment" patterns work.
+            statement += Environment.NewLine;
+
             return Regex
                 .Replace(
                     statement,
