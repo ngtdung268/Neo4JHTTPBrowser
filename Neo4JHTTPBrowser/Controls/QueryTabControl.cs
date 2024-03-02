@@ -71,14 +71,23 @@ namespace Neo4JHTTPBrowser.Controls
 
             if (e.Index == SelectedIndex)
             {
-                graphics.FillRectangle(new SolidBrush(Color.White), e.Bounds);
+                using (var brush = new SolidBrush(Color.White))
+                {
+                    graphics.FillRectangle(brush, e.Bounds);
+                }
             }
             else
             {
-                graphics.FillRectangle(new SolidBrush(SystemColors.Control), e.Bounds);
+                using (var brush = new SolidBrush(SystemColors.Control))
+                {
+                    graphics.FillRectangle(brush, e.Bounds);
+                }
             }
 
-            graphics.DrawString(page.Text, Font, new SolidBrush(ForeColor), rect.X + TextMargin, rect.Y + TextMargin);
+            using (var brush = new SolidBrush(ForeColor))
+            {
+                graphics.DrawString(page.Text, Font, new SolidBrush(ForeColor), rect.X + TextMargin, rect.Y + TextMargin);
+            }
 
             if (SupportCloseButton)
             {

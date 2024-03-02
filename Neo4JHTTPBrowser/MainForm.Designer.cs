@@ -67,6 +67,7 @@
             this.optionsMenuItem.Name = "optionsMenuItem";
             this.optionsMenuItem.Size = new System.Drawing.Size(68, 20);
             this.optionsMenuItem.Text = "&OPTIONS";
+            this.optionsMenuItem.Visible = false;
             // 
             // newQueryMenuItem
             // 
@@ -145,6 +146,7 @@
             // queriesTabControl
             // 
             this.queriesTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.queriesTabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.queriesTabControl.Location = new System.Drawing.Point(0, 0);
             this.queriesTabControl.Name = "queriesTabControl";
             this.queriesTabControl.SelectedIndex = 0;
