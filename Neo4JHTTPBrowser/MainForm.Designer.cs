@@ -39,7 +39,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.objectExplorerTreeView = new System.Windows.Forms.TreeView();
             this.objectExplorerHeaderLabel = new System.Windows.Forms.Label();
-            this.queriesTabControl = new System.Windows.Forms.TabControl();
+            this.queriesTabControl = new Neo4JHTTPBrowser.Controls.QueryTabControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.menuStrip.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -123,6 +123,7 @@
             // 
             // objectExplorerTreeView
             // 
+            this.objectExplorerTreeView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(249)))), ((int)(((byte)(254)))));
             this.objectExplorerTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.objectExplorerTreeView.Location = new System.Drawing.Point(1, 26);
             this.objectExplorerTreeView.Name = "objectExplorerTreeView";
@@ -148,6 +149,7 @@
             this.queriesTabControl.Name = "queriesTabControl";
             this.queriesTabControl.SelectedIndex = 0;
             this.queriesTabControl.Size = new System.Drawing.Size(472, 529);
+            this.queriesTabControl.SupportCloseButton = true;
             this.queriesTabControl.TabIndex = 0;
             // 
             // MainForm
@@ -189,7 +191,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label objectExplorerHeaderLabel;
         private System.Windows.Forms.TreeView objectExplorerTreeView;
-        private System.Windows.Forms.TabControl queriesTabControl;
+        private Neo4JHTTPBrowser.Controls.QueryTabControl queriesTabControl;
         private System.Windows.Forms.ToolTip toolTip;
     }
 }

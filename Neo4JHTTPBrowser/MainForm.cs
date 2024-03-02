@@ -138,26 +138,8 @@ namespace Neo4JHttpBrowser
 
         private void AddQueryTabPage(string query = null)
         {
-            var newTabNumber = queriesTabControl.TabPages.Count + 1;
-
-            var newTab = new QueryTabPage
-            {
-                TabIndex = 0,
-                Text = $"Query {newTabNumber}",
-                UseVisualStyleBackColor = true,
-            };
-
-            if (query != null)
-            {
-                newTab.View.Query = query;
-            }
-
-            queriesTabControl.Controls.Add(newTab);
-
-            queriesTabControl.SelectedIndex = newTabNumber - 1;
+            queriesTabControl.AddTabPage(query, selectTab: true);
             QueriesTabControl_SelectedIndexChanged(this, EventArgs.Empty);
-
-            newTab.Focus();
         }
 
         private void ExecuteMenuItem_Click(object sender, EventArgs e)
