@@ -10,7 +10,7 @@ namespace Neo4JHTTPBrowser.Controls
     {
         private int currentTabNumber = 0;
 
-        private const int TextMargin = 2;
+        private const int TextMargin = 3;
         private const int CloseButtonNormalIndex = 0;
         private const int CloseButtonHoverIndex = 1;
         private readonly Dictionary<string, Rectangle> closeButtons = new Dictionary<string, Rectangle>();
@@ -86,7 +86,7 @@ namespace Neo4JHTTPBrowser.Controls
 
             using (var brush = new SolidBrush(ForeColor))
             {
-                graphics.DrawString(page.Text, Font, new SolidBrush(ForeColor), rect.X + TextMargin, rect.Y + TextMargin);
+                TextRenderer.DrawText(graphics, page.Text, Font, new Point(rect.X + TextMargin, rect.Y + TextMargin), ForeColor);
             }
 
             if (SupportCloseButton)
