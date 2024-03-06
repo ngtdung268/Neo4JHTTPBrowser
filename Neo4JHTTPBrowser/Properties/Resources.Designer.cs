@@ -63,6 +63,16 @@ namespace Neo4JHTTPBrowser.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Add16 {
+            get {
+                object obj = ResourceManager.GetObject("Add16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Close16 {
             get {
                 object obj = ResourceManager.GetObject("Close16", resourceCulture);
@@ -76,6 +86,26 @@ namespace Neo4JHTTPBrowser.Properties {
         internal static System.Drawing.Bitmap CloseHover16 {
             get {
                 object obj = ResourceManager.GetObject("CloseHover16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Play16 {
+            get {
+                object obj = ResourceManager.GetObject("Play16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Remove16 {
+            get {
+                object obj = ResourceManager.GetObject("Remove16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

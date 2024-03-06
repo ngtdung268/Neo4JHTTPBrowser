@@ -1,5 +1,6 @@
 ﻿using Neo4JHttpBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
+using Neo4JHTTPBrowser.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Polly;
@@ -48,7 +49,7 @@ namespace Neo4JHttpBrowser
 
         private static RestClient CreateClient()
         {
-            var options = new RestClientOptions(AppConfigHelper.Neo4JBaseUrl)
+            var options = new RestClientOptions(Settings.Default.Neo4JBaseUrl)
             {
                 RemoteCertificateValidationCallback = (sender, cert, chain, sslPolicyErrors) => true,
                 ThrowOnAnyError = true,

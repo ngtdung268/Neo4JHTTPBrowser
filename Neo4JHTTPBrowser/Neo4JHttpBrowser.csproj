@@ -139,7 +139,12 @@
     <Compile Include="DTOs\ProcedureDTO.cs" />
     <Compile Include="DTOs\QueryRequestDTO.cs" />
     <Compile Include="DTOs\QueryResponseDTO.cs" />
-    <Compile Include="Helpers\AppConfigHelper.cs" />
+    <Compile Include="ConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConnectionForm.Designer.cs">
+      <DependentUpon>ConnectionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\ExceptionHelper.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\MessageBoxHelper.cs" />
@@ -156,6 +161,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\QueryTabView.resx">
       <DependentUpon>QueryTabView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConnectionForm.resx">
+      <DependentUpon>ConnectionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -187,6 +195,9 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="neo4j.ico" />
+    <Content Include="Resources\Add16.png" />
+    <Content Include="Resources\Play16.png" />
+    <Content Include="Resources\Remove16.png" />
     <Content Include="Resources\Close16.png" />
     <Content Include="Resources\CloseHover16.png" />
     <Content Include="Resources\neo4j.ico" />

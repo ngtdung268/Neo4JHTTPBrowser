@@ -1,5 +1,6 @@
 ﻿using Neo4JHttpBrowser.DTOs;
 using Neo4JHttpBrowser.Helpers;
+using Neo4JHTTPBrowser;
 using Neo4JHTTPBrowser.Controls;
 using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
@@ -39,6 +40,14 @@ namespace Neo4JHttpBrowser
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+
+            using (var connDialog = new ConnectionForm())
+            {
+                if (connDialog.ShowDialog() != DialogResult.OK)
+                {
+                    Application.Exit();
+                }
+            }
 
             objectsLoadingWorker.RunWorkerAsync();
 
