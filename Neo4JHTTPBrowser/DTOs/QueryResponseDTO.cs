@@ -21,6 +21,9 @@ namespace Neo4JHttpBrowser.DTOs
 
             [JsonProperty("data")]
             public List<ResultDataDTO> Data { get; set; }
+
+            [JsonProperty("plan")]
+            public Dictionary<string, Dictionary<string, object>> Plan { get; set; }
         }
 
         internal class ResultDataDTO

@@ -59,31 +59,38 @@ namespace Neo4JHttpBrowser.Helpers
                 throw new ArgumentNullException(nameof(result));
             }
 
-            var cols = result.Columns ?? new List<string>(0);
-            if (cols.Count == 0)
+            if (result.Plan != null && result.Plan.Any())
             {
-                return Enumerable.Empty<Dictionary<string, object>>();
+                return new List<Dictionary<string, object>>() { result.Plan["root"] };
             }
-
-            return result
-                .Data?
-                .Select(d =>
+            else
+            {
+                var cols = result.Columns ?? new List<string>(0);
+                if (cols.Count == 0)
                 {
-                    if (d.Row.Count != cols.Count)
-                    {
-                        return null;
-                    }
+                    return Enumerable.Empty<Dictionary<string, object>>();
+                }
 
-                    var dict = new Dictionary<string, object>();
-                    for (var i = 0; i < d.Row.Count; i++)
+                return result
+                    .Data?
+                    .Select(d =>
                     {
-                        dict.Add(cols[i], d.Row[i]);
-                    }
+                        if (d.Row.Count != cols.Count)
+                        {
+                            return null;
+                        }
 
-                    return dict;
-                })
-                .Where(r => r != null)
-                .ToList();
+                        var dict = new Dictionary<string, object>();
+                        for (var i = 0; i < d.Row.Count; i++)
+                        {
+                            dict.Add(cols[i], d.Row[i]);
+                        }
+
+                        return dict;
+                    })
+                    .Where(r => r != null)
+                    .ToList();
+            }
         }
 
         public static IEnumerable<T> GetRows<T>(QueryResponseDTO.ResultDTO result) where T : class
