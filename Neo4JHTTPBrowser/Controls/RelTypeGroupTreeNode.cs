@@ -1,6 +1,5 @@
-﻿using Neo4JHttpBrowser;
-using Neo4JHttpBrowser.DTOs;
-using Neo4JHttpBrowser.Helpers;
+﻿using Neo4JHTTPBrowser.DTOs;
+using Neo4JHTTPBrowser.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,17 +35,17 @@ namespace Neo4JHTTPBrowser.Controls
 
         public override string ToString()
         {
-            return IsOutgoing ? "Outgoing Relationship Types" : "Incoming Relationship Types";
+            var result = IsOutgoing ? "Outgoing Relationship Types" : "Incoming Relationship Types";
+            if (isRelTypesLoaded)
+            {
+                result += $" ({Nodes.Count})";
+            }
+            return result;
         }
 
         public void LoadRelationshipTypes()
         {
             if (isRelTypesLoaded || relTypesLoadingWorker.IsBusy)
-            {
-                return;
-            }
-
-            if (Nodes.Count != 1 || !(Nodes[0] is EmptyTreeNode))
             {
                 return;
             }
@@ -78,51 +77,58 @@ namespace Neo4JHTTPBrowser.Controls
 
         private void RelTypesLoadingWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
-            base.Text = ToString();
-            Nodes.Clear();
-
-            if (e.Error != null)
+            try
             {
-                Nodes.Add(e.Error.Message);
-                return;
-            }
+                Nodes.Clear();
 
-            var response = e.Result as QueryResponseDTO;
-            if (response.Errors != null && response.Errors.Any())
-            {
-                Nodes.Add(Neo4JHelper.GetErrorText(response));
-                return;
-            }
-
-            if (response.Results != null && response.Results.Any())
-            {
-                var rows = Neo4JHelper.GetRows(response.Results.First());
-                if (rows.Any())
+                if (e.Error != null)
                 {
-                    var relationshipTypes = new List<string>();
+                    var cause = ExceptionHelper.GetCause(e.Error);
+                    Nodes.Add(cause.Message);
+                    return;
+                }
 
-                    foreach (var row in rows)
+                var response = e.Result as QueryResponseDTO;
+                if (response.Errors != null && response.Errors.Any())
+                {
+                    Nodes.Add(Neo4JHelper.GetErrorText(response));
+                    return;
+                }
+
+                if (response.Results != null && response.Results.Any())
+                {
+                    var rows = Neo4JHelper.GetRows(response.Results.First());
+                    if (rows.Any())
                     {
-                        var labels = (row["LABEL"] as JArray).ToObject<IEnumerable<string>>();
-                        var type = row["TYPE"] as string;
+                        var relationshipTypes = new List<string>();
 
-                        foreach (var label in labels)
+                        foreach (var row in rows)
                         {
-                            if (IsOutgoing)
+                            var labels = (row["LABEL"] as JArray).ToObject<IEnumerable<string>>();
+                            var type = row["TYPE"] as string;
+
+                            foreach (var label in labels)
                             {
-                                relationshipTypes.Add($"({NodeLabel})-[{type}]->({label})");
-                            }
-                            else
-                            {
-                                relationshipTypes.Add($"({label})-[{type}]->({NodeLabel})");
+                                if (IsOutgoing)
+                                {
+                                    relationshipTypes.Add($"({NodeLabel})-[{type}]->({label})");
+                                }
+                                else
+                                {
+                                    relationshipTypes.Add($"({label})-[{type}]->({NodeLabel})");
+                                }
                             }
                         }
+
+                        relationshipTypes.Sort();
+
+                        Nodes.AddRange(relationshipTypes.Select(t => new TreeNode(t)).ToArray());
                     }
-
-                    relationshipTypes.Sort();
-
-                    Nodes.AddRange(relationshipTypes.Select(t => new TreeNode(t)).ToArray());
                 }
+            }
+            finally
+            {
+                base.Text = ToString();
             }
         }
     }

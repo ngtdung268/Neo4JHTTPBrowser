@@ -1,4 +1,4 @@
-﻿using Neo4JHttpBrowser.DTOs;
+﻿using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
 using Neo4JHTTPBrowser.Properties;
 using Newtonsoft.Json;
@@ -15,7 +15,7 @@ using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Neo4JHttpBrowser
+namespace Neo4JHTTPBrowser
 {
     internal sealed class Neo4JApiService
     {

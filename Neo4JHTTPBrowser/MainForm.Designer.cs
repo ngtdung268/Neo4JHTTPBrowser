@@ -1,4 +1,4 @@
-﻿namespace Neo4JHttpBrowser
+﻿namespace Neo4JHTTPBrowser
 {
     partial class MainForm
     {
@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newQueryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
@@ -40,7 +41,6 @@
             this.objectExplorerHeaderLabel = new System.Windows.Forms.Label();
             this.queriesTabControl = new Neo4JHTTPBrowser.Controls.QueryTabControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.newQueryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -69,8 +69,17 @@
             this.optionsMenuItem.Text = "&OPTIONS";
             this.optionsMenuItem.Visible = false;
             // 
+            // newQueryMenuItem
+            // 
+            this.newQueryMenuItem.Enabled = false;
+            this.newQueryMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.Add16;
+            this.newQueryMenuItem.Name = "newQueryMenuItem";
+            this.newQueryMenuItem.Size = new System.Drawing.Size(101, 20);
+            this.newQueryMenuItem.Text = "&NEW QUERY";
+            // 
             // executeMenuItem
             // 
+            this.executeMenuItem.Enabled = false;
             this.executeMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.Play16;
             this.executeMenuItem.Name = "executeMenuItem";
             this.executeMenuItem.Size = new System.Drawing.Size(82, 20);
@@ -123,6 +132,7 @@
             this.objectExplorerTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.objectExplorerTreeView.Location = new System.Drawing.Point(1, 26);
             this.objectExplorerTreeView.Name = "objectExplorerTreeView";
+            this.objectExplorerTreeView.ShowNodeToolTips = true;
             this.objectExplorerTreeView.Size = new System.Drawing.Size(298, 502);
             this.objectExplorerTreeView.TabIndex = 1;
             // 
@@ -148,13 +158,6 @@
             this.queriesTabControl.Size = new System.Drawing.Size(472, 529);
             this.queriesTabControl.SupportCloseButton = true;
             this.queriesTabControl.TabIndex = 0;
-            // 
-            // newQueryMenuItem
-            // 
-            this.newQueryMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.Add16;
-            this.newQueryMenuItem.Name = "newQueryMenuItem";
-            this.newQueryMenuItem.Size = new System.Drawing.Size(101, 20);
-            this.newQueryMenuItem.Text = "&NEW QUERY";
             // 
             // MainForm
             // 

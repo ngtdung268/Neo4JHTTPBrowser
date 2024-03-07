@@ -5,7 +5,7 @@ using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Neo4JHttpBrowser
+namespace Neo4JHTTPBrowser
 {
     internal static class Program
     {

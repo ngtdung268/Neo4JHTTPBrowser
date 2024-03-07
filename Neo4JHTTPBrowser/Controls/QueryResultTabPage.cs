@@ -1,4 +1,4 @@
-﻿using Neo4JHttpBrowser.DTOs;
+﻿using Neo4JHTTPBrowser.DTOs;
 using System.Windows.Forms;
 
 namespace Neo4JHTTPBrowser.Controls

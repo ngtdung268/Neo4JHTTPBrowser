@@ -16,6 +16,8 @@ namespace Neo4JHTTPBrowser.Controls
         private readonly Dictionary<string, Rectangle> closeButtons = new Dictionary<string, Rectangle>();
         private static readonly Point CloseImageLocation = new Point(20, 5);
 
+        private static readonly Color ActiveTabBackColor = Color.FromArgb(214, 219, 233);
+
         [Browsable(true)]
         [Description("Indicate when this workspace is supported close button."), Category("Appearance")]
         public bool SupportCloseButton { get; set; }
@@ -71,7 +73,7 @@ namespace Neo4JHTTPBrowser.Controls
 
             if (e.Index == SelectedIndex)
             {
-                using (var brush = new SolidBrush(Color.White))
+                using (var brush = new SolidBrush(ActiveTabBackColor))
                 {
                     graphics.FillRectangle(brush, e.Bounds);
                 }

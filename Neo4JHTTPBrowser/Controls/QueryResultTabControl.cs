@@ -1,5 +1,5 @@
-﻿using Neo4JHttpBrowser.DTOs;
-using Neo4JHttpBrowser.Helpers;
+﻿using Neo4JHTTPBrowser.DTOs;
+using Neo4JHTTPBrowser.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;

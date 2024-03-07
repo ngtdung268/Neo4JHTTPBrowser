@@ -1,4 +1,4 @@
-﻿using Neo4JHttpBrowser.DTOs;
+﻿using Neo4JHTTPBrowser.DTOs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Neo4JHttpBrowser.Helpers
+namespace Neo4JHTTPBrowser.Helpers
 {
     internal static class Neo4JHelper
     {

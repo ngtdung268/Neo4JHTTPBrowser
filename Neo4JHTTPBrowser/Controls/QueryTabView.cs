@@ -1,6 +1,5 @@
-﻿using Neo4JHttpBrowser;
-using Neo4JHttpBrowser.DTOs;
-using Neo4JHttpBrowser.Helpers;
+﻿using Neo4JHTTPBrowser.DTOs;
+using Neo4JHTTPBrowser.Helpers;
 using ScintillaNET;
 using System;
 using System.Collections.Generic;

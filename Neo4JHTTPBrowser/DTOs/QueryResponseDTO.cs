@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Neo4JHttpBrowser.DTOs
+namespace Neo4JHTTPBrowser.DTOs
 {
     internal class QueryResponseDTO
     {

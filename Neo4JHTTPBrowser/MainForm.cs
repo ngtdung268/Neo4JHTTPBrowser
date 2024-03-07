@@ -1,7 +1,4 @@
-﻿using Neo4JHttpBrowser.DTOs;
-using Neo4JHttpBrowser.Helpers;
-using Neo4JHTTPBrowser;
-using Neo4JHTTPBrowser.Controls;
+﻿using Neo4JHTTPBrowser.Controls;
 using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
 using Newtonsoft.Json.Linq;
@@ -10,9 +7,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Net.Sockets;
 using System.Windows.Forms;
 
-namespace Neo4JHttpBrowser
+namespace Neo4JHTTPBrowser
 {
     public partial class MainForm : Form
     {
@@ -31,7 +29,6 @@ namespace Neo4JHttpBrowser
 
             queriesTabControl.SelectedIndexChanged += QueriesTabControl_SelectedIndexChanged;
 
-            objectExplorerTreeView.Nodes.Add("Loading...");
             objectExplorerTreeView.BeforeExpand += ObjectExplorerTreeView_BeforeExpand;
             objectExplorerTreeView.NodeMouseDoubleClick += ObjectExplorerTreeView_NodeMouseDoubleClick;
             objectExplorerTreeView.KeyDown += ObjectExplorerTreeView_KeyDown;
@@ -40,7 +37,11 @@ namespace Neo4JHttpBrowser
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+            SetupConnection();
+        }
 
+        private void SetupConnection()
+        {
             using (var connDialog = new ConnectionForm())
             {
                 if (connDialog.ShowDialog() != DialogResult.OK)
@@ -49,9 +50,9 @@ namespace Neo4JHttpBrowser
                 }
             }
 
-            objectsLoadingWorker.RunWorkerAsync();
+            objectExplorerTreeView.Nodes.Add("Loading...");
 
-            NewQueryMenuItem_Click(this, EventArgs.Empty);
+            objectsLoadingWorker.RunWorkerAsync();
         }
 
         private void ObjectsLoadingWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -80,7 +81,14 @@ namespace Neo4JHttpBrowser
 
             if (e.Error != null)
             {
-                MessageBoxHelper.Error(this, e.Error.Message);
+                var cause = ExceptionHelper.GetCause(e.Error);
+                MessageBoxHelper.Error(this, cause.Message);
+
+                if (cause is SocketException)
+                {
+                    SetupConnection();
+                }
+
                 return;
             }
 
@@ -101,6 +109,8 @@ namespace Neo4JHttpBrowser
                 objectExplorerTreeView.Nodes.Add(proceduresTreeNode);
                 AddProceduresToObjectExplorer(proceduresTreeNode, response.Results[1]);
             }
+
+            MakeReadyToQuery();
         }
 
         private void AddNodeLabelsToObjectExplorer(TreeNode parentNode, QueryResponseDTO.ResultDTO result)
@@ -119,6 +129,7 @@ namespace Neo4JHttpBrowser
                 parentNode.Nodes.Add(node);
             }
 
+            parentNode.Text += $" ({nodes.Count})";
             parentNode.Expand();
         }
 
@@ -140,6 +151,13 @@ namespace Neo4JHttpBrowser
             parentNode.Expand();
         }
 
+        private void MakeReadyToQuery()
+        {
+            newQueryMenuItem.Enabled = true;
+            executeMenuItem.Enabled = true;
+            NewQueryMenuItem_Click(this, EventArgs.Empty);
+        }
+
         private void NewQueryMenuItem_Click(object sender, EventArgs e)
         {
             AddQueryTabPage();
@@ -153,12 +171,10 @@ namespace Neo4JHttpBrowser
 
         private void ExecuteMenuItem_Click(object sender, EventArgs e)
         {
-            if (queriesTabControl.SelectedIndex == -1)
+            if (queriesTabControl.SelectedTab != null && (queriesTabControl.SelectedTab is QueryTabPage queryTab))
             {
-                return;
+                queryTab.View.ExecuteQuery();
             }
-
-            (queriesTabControl.SelectedTab as QueryTabPage).View.ExecuteQuery();
         }
 
         private void QueriesTabControl_SelectedIndexChanged(object sender, EventArgs e)

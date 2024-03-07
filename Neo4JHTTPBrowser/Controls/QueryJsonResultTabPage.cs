@@ -1,5 +1,5 @@
-﻿using Neo4JHttpBrowser.DTOs;
-using Neo4JHttpBrowser.Helpers;
+﻿using Neo4JHTTPBrowser.DTOs;
+using Neo4JHTTPBrowser.Helpers;
 using Newtonsoft.Json;
 using ScintillaNET;
 using System.Collections.Generic;
