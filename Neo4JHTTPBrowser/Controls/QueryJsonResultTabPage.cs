@@ -15,6 +15,8 @@ namespace Neo4JHTTPBrowser.Controls
     {
         private readonly Scintilla editor = new Scintilla();
 
+        private int editorLastCaretPosition = 0;
+
         public QueryJsonResultTabPage()
         {
             SetupResultEditor();
@@ -92,6 +94,11 @@ namespace Neo4JHTTPBrowser.Controls
             // Configure the JSON lexer styles.
             editor.Lexer = Lexer.Json;
 
+            editor.Styles[Style.BraceBad].ForeColor = Color.Red;
+            editor.Styles[Style.BraceBad].BackColor = Color.White;
+            editor.Styles[Style.BraceLight].ForeColor = Color.Red;
+            editor.Styles[Style.BraceLight].BackColor = Color.White;
+
             editor.Styles[Style.Json.Default].ForeColor = Color.Silver;
             editor.Styles[Style.Json.BlockComment].ForeColor = Color.FromArgb(0, 128, 0); // Green
             editor.Styles[Style.Json.LineComment].ForeColor = Color.FromArgb(0, 128, 0);  // Green
@@ -130,6 +137,63 @@ namespace Neo4JHTTPBrowser.Controls
 
             // Enable automatic folding.
             editor.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
+
+            editor.UpdateUI += OnEditorUpdateUI;
+        }
+
+        // https://github.com/jacobslusser/ScintillaNET/wiki/Brace-Matching
+        private void OnEditorUpdateUI(object sender, UpdateUIEventArgs e)
+        {
+            // Has the caret changed position?
+            var caretPosition = editor.CurrentPosition;
+            if (editorLastCaretPosition != caretPosition)
+            {
+                editorLastCaretPosition = caretPosition;
+
+                // Is there a brace to the left or right?
+                var openBracePosition = -1;
+                if (caretPosition > 0 && IsBrace(editor.GetCharAt(caretPosition - 1)))
+                {
+                    openBracePosition = caretPosition - 1;
+                }
+                else if (IsBrace(editor.GetCharAt(caretPosition)))
+                {
+                    openBracePosition = caretPosition;
+                }
+
+                if (openBracePosition >= 0)
+                {
+                    // Find the matching brace.
+                    var closeBracePosition = editor.BraceMatch(openBracePosition);
+                    if (closeBracePosition == Scintilla.InvalidPosition)
+                    {
+                        editor.BraceBadLight(openBracePosition);
+                    }
+                    else
+                    {
+                        editor.BraceHighlight(openBracePosition, closeBracePosition);
+                    }
+                }
+                else
+                {
+                    // Turn off brace matching.
+                    editor.BraceHighlight(Scintilla.InvalidPosition, Scintilla.InvalidPosition);
+                }
+            }
+        }
+
+        private static bool IsBrace(int c)
+        {
+            switch (c)
+            {
+                case '[':
+                case ']':
+                case '{':
+                case '}':
+                    return true;
+            }
+
+            return false;
         }
     }
 }

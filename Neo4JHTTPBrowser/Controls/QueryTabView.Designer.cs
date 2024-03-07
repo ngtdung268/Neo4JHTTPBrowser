@@ -35,7 +35,7 @@
             this.elapsedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.queryEditor = new ScintillaNET.Scintilla();
+            this.editor = new ScintillaNET.Scintilla();
             this.resultsTabControl = new Neo4JHTTPBrowser.Controls.QueryResultTabControl();
             this.statusStrip.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -104,7 +104,7 @@
             // 
             // splitContainer.Panel1
             // 
-            this.splitContainer.Panel1.Controls.Add(this.queryEditor);
+            this.splitContainer.Panel1.Controls.Add(this.editor);
             // 
             // splitContainer.Panel2
             // 
@@ -113,15 +113,15 @@
             this.splitContainer.SplitterDistance = 250;
             this.splitContainer.TabIndex = 2;
             // 
-            // queryEditor
+            // editor
             // 
-            this.queryEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.queryEditor.Lexer = ScintillaNET.Lexer.Sql;
-            this.queryEditor.Location = new System.Drawing.Point(0, 0);
-            this.queryEditor.Name = "queryEditor";
-            this.queryEditor.Size = new System.Drawing.Size(500, 250);
-            this.queryEditor.TabIndex = 0;
-            this.queryEditor.WrapMode = ScintillaNET.WrapMode.Word;
+            this.editor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editor.Lexer = ScintillaNET.Lexer.Sql;
+            this.editor.Location = new System.Drawing.Point(0, 0);
+            this.editor.Name = "editor";
+            this.editor.Size = new System.Drawing.Size(500, 250);
+            this.editor.TabIndex = 0;
+            this.editor.WrapMode = ScintillaNET.WrapMode.Word;
             // 
             // resultsTabControl
             // 
@@ -163,7 +163,7 @@
         private System.Windows.Forms.ToolStripStatusLabel elapsedDelimiterLabel;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.SplitContainer splitContainer;
-        private ScintillaNET.Scintilla queryEditor;
+        private ScintillaNET.Scintilla editor;
         private QueryResultTabControl resultsTabControl;
     }
 }

@@ -15,16 +15,18 @@ namespace Neo4JHTTPBrowser.Controls
     {
         private readonly BackgroundWorker executionWorker;
 
+        private int editorLastCaretPosition = 0;
+
         public string Query
         {
             get
             {
-                return queryEditor.Text;
+                return editor.Text;
             }
             set
             {
-                queryEditor.Text = value;
-                queryEditor.SelectionStart = queryEditor.Text.Length;
+                editor.Text = value;
+                editor.SelectionStart = editor.Text.Length;
             }
         }
 
@@ -49,16 +51,16 @@ namespace Neo4JHTTPBrowser.Controls
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            queryEditor.Focus();
-            queryEditor.ScrollCaret();
+            editor.Focus();
+            editor.ScrollCaret();
         }
 
         public void ExecuteQuery()
         {
-            var inputText = queryEditor.SelectedText.Trim();
+            var inputText = editor.SelectedText.Trim();
             if (inputText.Length == 0)
             {
-                inputText = queryEditor.Text.Trim();
+                inputText = editor.Text.Trim();
             }
             if (inputText.Length == 0)
             {
@@ -143,46 +145,111 @@ namespace Neo4JHTTPBrowser.Controls
 
         private void SetupQueryEditor()
         {
-            queryEditor.SetSelectionBackColor(true, Color.FromArgb(153, 201, 239));
+            editor.SetSelectionBackColor(true, Color.FromArgb(153, 201, 239));
 
-            queryEditor.CaretLineVisible = true;
-            queryEditor.CaretLineBackColor = Color.FromArgb(232, 232, 255);
+            editor.CaretLineVisible = true;
+            editor.CaretLineBackColor = Color.FromArgb(232, 232, 255);
 
             // Configure the default styles.
-            queryEditor.StyleResetDefault();
-            queryEditor.Styles[Style.Default].Font = "Consolas";
-            queryEditor.Styles[Style.Default].Size = 10;
-            queryEditor.Styles[Style.Default].BackColor = Color.White;
-            queryEditor.Styles[Style.Default].ForeColor = Color.Black;
-            queryEditor.StyleClearAll();
+            editor.StyleResetDefault();
+            editor.Styles[Style.Default].Font = "Consolas";
+            editor.Styles[Style.Default].Size = 10;
+            editor.Styles[Style.Default].BackColor = Color.White;
+            editor.Styles[Style.Default].ForeColor = Color.Black;
+            editor.StyleClearAll();
 
             // Configure the SQL lexer styles.
-            queryEditor.Lexer = Lexer.Sql;
+            editor.Lexer = Lexer.Sql;
 
-            queryEditor.Styles[Style.LineNumber].ForeColor = Color.FromArgb(255, 128, 128, 128);    // Dark Gray
-            queryEditor.Styles[Style.LineNumber].BackColor = Color.FromArgb(255, 228, 228, 228);    // Light Gray
-            queryEditor.Styles[Style.Sql.Comment].ForeColor = Color.Green;
-            queryEditor.Styles[Style.Sql.CommentLine].ForeColor = Color.Green;
-            queryEditor.Styles[Style.Sql.CommentLineDoc].ForeColor = Color.Green;
-            queryEditor.Styles[Style.Sql.Number].ForeColor = Color.Maroon;
-            queryEditor.Styles[Style.Sql.Word].ForeColor = Color.Blue;
-            queryEditor.Styles[Style.Sql.Word2].ForeColor = Color.Fuchsia;
-            queryEditor.Styles[Style.Sql.User1].ForeColor = Color.Gray;
-            queryEditor.Styles[Style.Sql.User2].ForeColor = Color.FromArgb(255, 00, 128, 192);      // Medium Blue-Green
-            queryEditor.Styles[Style.Sql.String].ForeColor = Color.Red;
-            queryEditor.Styles[Style.Sql.Character].ForeColor = Color.Red;
-            queryEditor.Styles[Style.Sql.Operator].ForeColor = Color.Black;
+            editor.Styles[Style.LineNumber].ForeColor = Color.FromArgb(255, 128, 128, 128);    // Dark Gray
+            editor.Styles[Style.LineNumber].BackColor = Color.FromArgb(255, 228, 228, 228);    // Light Gray
 
-            queryEditor.SetKeywords(0, string.Join(" ", Neo4JHelper.ReservedKeywords.Clauses.Concat(Neo4JHelper.ReservedKeywords.SubClauses).Concat(Neo4JHelper.ReservedKeywords.Schema).Concat(Neo4JHelper.ReservedKeywords.Hints)).ToLowerInvariant());
-            queryEditor.SetKeywords(1, string.Join(" ", Neo4JHelper.ReservedKeywords.Modifiers.Concat(Neo4JHelper.ReservedKeywords.Expressions)).ToLowerInvariant());
-            queryEditor.SetKeywords(4, string.Join(" ", Neo4JHelper.ReservedKeywords.Operators.Concat(Neo4JHelper.ReservedKeywords.FutureUse)).ToLowerInvariant());
-            queryEditor.SetKeywords(5, string.Join(" ", Neo4JHelper.ReservedKeywords.Literals).ToLowerInvariant());
+            editor.Styles[Style.BraceBad].ForeColor = Color.Red;
+            editor.Styles[Style.BraceBad].BackColor = Color.White;
+            editor.Styles[Style.BraceLight].ForeColor = Color.Red;
+            editor.Styles[Style.BraceLight].BackColor = Color.White;
+
+            editor.Styles[Style.Sql.Comment].ForeColor = Color.Green;
+            editor.Styles[Style.Sql.CommentLine].ForeColor = Color.Green;
+            editor.Styles[Style.Sql.CommentLineDoc].ForeColor = Color.Green;
+            editor.Styles[Style.Sql.Number].ForeColor = Color.Maroon;
+            editor.Styles[Style.Sql.Word].ForeColor = Color.Blue;
+            editor.Styles[Style.Sql.Word2].ForeColor = Color.Fuchsia;
+            editor.Styles[Style.Sql.User1].ForeColor = Color.Gray;
+            editor.Styles[Style.Sql.User2].ForeColor = Color.FromArgb(255, 00, 128, 192);      // Medium Blue-Green
+            editor.Styles[Style.Sql.String].ForeColor = Color.Red;
+            editor.Styles[Style.Sql.Character].ForeColor = Color.Red;
+            editor.Styles[Style.Sql.Operator].ForeColor = Color.Black;
+
+            editor.SetKeywords(0, string.Join(" ", Neo4JHelper.ReservedKeywords.Clauses.Concat(Neo4JHelper.ReservedKeywords.SubClauses).Concat(Neo4JHelper.ReservedKeywords.Schema).Concat(Neo4JHelper.ReservedKeywords.Hints)).ToLowerInvariant());
+            editor.SetKeywords(1, string.Join(" ", Neo4JHelper.ReservedKeywords.Modifiers.Concat(Neo4JHelper.ReservedKeywords.Expressions)).ToLowerInvariant());
+            editor.SetKeywords(4, string.Join(" ", Neo4JHelper.ReservedKeywords.Operators.Concat(Neo4JHelper.ReservedKeywords.FutureUse)).ToLowerInvariant());
+            editor.SetKeywords(5, string.Join(" ", Neo4JHelper.ReservedKeywords.Literals).ToLowerInvariant());
 
             // Show line numbers.
-            var margin = queryEditor.Margins[0];
+            var margin = editor.Margins[0];
             margin.Width = 20;
             margin.Type = MarginType.Number;
             margin.Sensitive = true;
+
+            editor.UpdateUI += OnEditorUpdateUI;
+        }
+
+        // https://github.com/jacobslusser/ScintillaNET/wiki/Brace-Matching
+        private void OnEditorUpdateUI(object sender, UpdateUIEventArgs e)
+        {
+            // Has the caret changed position?
+            var caretPosition = editor.CurrentPosition;
+            if (editorLastCaretPosition != caretPosition)
+            {
+                editorLastCaretPosition = caretPosition;
+
+                // Is there a brace to the left or right?
+                var openBracePosition = -1;
+                if (caretPosition > 0 && IsBrace(editor.GetCharAt(caretPosition - 1)))
+                {
+                    openBracePosition = caretPosition - 1;
+                }
+                else if (IsBrace(editor.GetCharAt(caretPosition)))
+                {
+                    openBracePosition = caretPosition;
+                }
+
+                if (openBracePosition >= 0)
+                {
+                    // Find the matching brace.
+                    var closeBracePosition = editor.BraceMatch(openBracePosition);
+                    if (closeBracePosition == Scintilla.InvalidPosition)
+                    {
+                        editor.BraceBadLight(openBracePosition);
+                    }
+                    else
+                    {
+                        editor.BraceHighlight(openBracePosition, closeBracePosition);
+                    }
+                }
+                else
+                {
+                    // Turn off brace matching.
+                    editor.BraceHighlight(Scintilla.InvalidPosition, Scintilla.InvalidPosition);
+                }
+            }
+        }
+
+        private static bool IsBrace(int c)
+        {
+            switch (c)
+            {
+                case '(':
+                case ')':
+                case '[':
+                case ']':
+                case '{':
+                case '}':
+                    return true;
+            }
+
+            return false;
         }
     }
 }
