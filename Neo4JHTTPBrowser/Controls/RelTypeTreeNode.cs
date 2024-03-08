@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using Neo4JHTTPBrowser.Helpers;
+using System.Windows.Forms;
 
 namespace Neo4JHTTPBrowser.Controls
 {
@@ -17,6 +18,9 @@ namespace Neo4JHTTPBrowser.Controls
             SourceNodeLabel = sourceNodeLabel;
             TargetNodeLabel = targetNodeLabel;
             RelationshipType = relationshipType;
+
+            ImageKey = UIHelper.ObjectExplorerImageKeys.RelType;
+            SelectedImageKey = UIHelper.ObjectExplorerImageKeys.RelType;
 
             base.Text = ToString();
         }

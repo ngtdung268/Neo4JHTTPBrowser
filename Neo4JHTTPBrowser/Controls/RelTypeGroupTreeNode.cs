@@ -24,6 +24,15 @@ namespace Neo4JHTTPBrowser.Controls
             NodeLabel = nodeLabel;
             IsOutgoing = isOutgoing;
 
+            if (isOutgoing)
+            {
+                ImageKey = UIHelper.ObjectExplorerImageKeys.RelTypeOutgoing;
+            }
+            else
+            {
+                ImageKey = UIHelper.ObjectExplorerImageKeys.RelTypeIncoming;
+            }
+
             base.Text = ToString();
 
             Nodes.Add(new EmptyTreeNode());
@@ -51,6 +60,7 @@ namespace Neo4JHTTPBrowser.Controls
             }
 
             base.Text = ToString() + " (expanding...)";
+            Nodes.Clear();
 
             relTypesLoadingWorker.RunWorkerAsync();
         }
@@ -79,8 +89,6 @@ namespace Neo4JHTTPBrowser.Controls
         {
             try
             {
-                Nodes.Clear();
-
                 if (e.Error != null)
                 {
                     var cause = ExceptionHelper.GetCause(e.Error);
@@ -100,7 +108,7 @@ namespace Neo4JHTTPBrowser.Controls
                     var rows = Neo4JHelper.GetRows(response.Results.First());
                     if (rows.Any())
                     {
-                        var relationshipTypes = new List<string>();
+                        var relTypeNodes = new List<RelTypeTreeNode>();
 
                         foreach (var row in rows)
                         {
@@ -111,24 +119,25 @@ namespace Neo4JHTTPBrowser.Controls
                             {
                                 if (IsOutgoing)
                                 {
-                                    relationshipTypes.Add($"({NodeLabel})-[{type}]->({label})");
+                                    relTypeNodes.Add(new RelTypeTreeNode(NodeLabel, label, type));
                                 }
                                 else
                                 {
-                                    relationshipTypes.Add($"({label})-[{type}]->({NodeLabel})");
+                                    relTypeNodes.Add(new RelTypeTreeNode(label, NodeLabel, type));
                                 }
                             }
                         }
 
-                        relationshipTypes.Sort();
+                        relTypeNodes = relTypeNodes.OrderBy(n => n.Text).ToList();
 
-                        Nodes.AddRange(relationshipTypes.Select(t => new TreeNode(t)).ToArray());
+                        Nodes.AddRange(relTypeNodes.ToArray());
                     }
                 }
             }
             finally
             {
                 base.Text = ToString();
+                Expand();
             }
         }
     }

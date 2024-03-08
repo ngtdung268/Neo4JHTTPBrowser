@@ -1,4 +1,5 @@
 ﻿using Neo4JHTTPBrowser.DTOs;
+using Neo4JHTTPBrowser.Helpers;
 using System.Windows.Forms;
 
 namespace Neo4JHTTPBrowser.Controls
@@ -14,6 +15,9 @@ namespace Neo4JHTTPBrowser.Controls
             Procedure = procedure;
 
             ToolTipText = Procedure?.Description;
+
+            ImageKey = UIHelper.ObjectExplorerImageKeys.Procedure;
+            SelectedImageKey = UIHelper.ObjectExplorerImageKeys.Procedure;
 
             base.Text = ToString();
         }

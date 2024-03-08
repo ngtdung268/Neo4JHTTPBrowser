@@ -150,6 +150,7 @@
     <Compile Include="Helpers\MessageBoxHelper.cs" />
     <Compile Include="Helpers\Neo4JHelper.cs" />
     <Compile Include="Helpers\SingleOrDictListPropertyConverter.cs" />
+    <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,19 +171,19 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -195,12 +196,25 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="neo4j.ico" />
-    <Content Include="Resources\Add16.png" />
-    <Content Include="Resources\Play16.png" />
-    <Content Include="Resources\Remove16.png" />
-    <Content Include="Resources\Close16.png" />
-    <Content Include="Resources\CloseHover16.png" />
+    <Content Include="Resources\add_16.png" />
+    <Content Include="Resources\IconWebsites.txt" />
+    <Content Include="Resources\loading_16.gif" />
+    <Content Include="Resources\code_file_16.png" />
+    <Content Include="Resources\connected_16.png" />
+    <Content Include="Resources\connect_16.png" />
+    <Content Include="Resources\enter-16.png" />
+    <Content Include="Resources\file_16.png" />
+    <Content Include="Resources\folder_16.png" />
+    <Content Include="Resources\folder_program_16.png" />
+    <Content Include="Resources\label_16.png" />
+    <Content Include="Resources\logout_16.png" />
+    <Content Include="Resources\play_16.png" />
+    <Content Include="Resources\remove_16.png" />
+    <Content Include="Resources\close_16.png" />
+    <Content Include="Resources\close_hover_16.png" />
     <Content Include="Resources\neo4j.ico" />
+    <Content Include="Resources\script_16.png" />
+    <Content Include="Resources\trash_16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

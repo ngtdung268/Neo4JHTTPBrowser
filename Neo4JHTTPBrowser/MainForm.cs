@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Net.Sockets;
 using System.Windows.Forms;
@@ -32,6 +33,16 @@ namespace Neo4JHTTPBrowser
             objectExplorerTreeView.BeforeExpand += ObjectExplorerTreeView_BeforeExpand;
             objectExplorerTreeView.NodeMouseDoubleClick += ObjectExplorerTreeView_NodeMouseDoubleClick;
             objectExplorerTreeView.KeyDown += ObjectExplorerTreeView_KeyDown;
+
+            var objectIcons = new ImageList();
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.Category, Properties.Resources.folder_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.NodeLabel, Properties.Resources.label_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.Procedure, Properties.Resources.code_file_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.ProcedureMode, Properties.Resources.folder_program_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelType, Properties.Resources.connect_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelTypeIncoming, Properties.Resources.enter_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelTypeOutgoing, Properties.Resources.logout_16);
+            objectExplorerTreeView.ImageList = objectIcons;
         }
 
         protected override void OnShown(EventArgs e)
@@ -101,13 +112,30 @@ namespace Neo4JHTTPBrowser
 
             if (response.Results != null)
             {
-                var nodeLabelsTreeNode = new TreeNode("Node Labels");
+                var firstNodeLevelFont = new Font(DefaultFont, FontStyle.Bold);
+                var ObjectExplorerFirstNodeLevelForeColor = Color.Navy;
+
+                var nodeLabelsTreeNode = new TreeNode()
+                {
+                    ForeColor = ObjectExplorerFirstNodeLevelForeColor,
+                    ImageKey = UIHelper.ObjectExplorerImageKeys.Category,
+                    NodeFont = firstNodeLevelFont,
+                    SelectedImageKey = UIHelper.ObjectExplorerImageKeys.Category,
+                };
                 objectExplorerTreeView.Nodes.Add(nodeLabelsTreeNode);
                 AddNodeLabelsToObjectExplorer(nodeLabelsTreeNode, response.Results[0]);
+                nodeLabelsTreeNode.Text = "Node Labels";
 
-                var proceduresTreeNode = new TreeNode("Procedures");
+                var proceduresTreeNode = new TreeNode()
+                {
+                    ForeColor = ObjectExplorerFirstNodeLevelForeColor,
+                    ImageKey = UIHelper.ObjectExplorerImageKeys.Category,
+                    NodeFont = firstNodeLevelFont,
+                    SelectedImageKey = UIHelper.ObjectExplorerImageKeys.Category,
+                };
                 objectExplorerTreeView.Nodes.Add(proceduresTreeNode);
                 AddProceduresToObjectExplorer(proceduresTreeNode, response.Results[1]);
+                proceduresTreeNode.Text = "Procedures";
             }
 
             MakeReadyToQuery();
@@ -139,7 +167,11 @@ namespace Neo4JHTTPBrowser
 
             foreach (var group in procedures.GroupBy(p => p.Mode).OrderBy(g => g.Key))
             {
-                var modeTreeNode = new TreeNode(group.Key);
+                var modeTreeNode = new TreeNode(group.Key)
+                {
+                    ImageKey = UIHelper.ObjectExplorerImageKeys.ProcedureMode,
+                    SelectedImageKey = UIHelper.ObjectExplorerImageKeys.ProcedureMode
+                };
                 parentNode.Nodes.Add(modeTreeNode);
 
                 foreach (var item in group.OrderBy(i => i.Name))

@@ -28,25 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.connectBtn = new System.Windows.Forms.Button();
             this.savedUrlsListView = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.urlTextBox = new System.Windows.Forms.TextBox();
             this.addBtn = new System.Windows.Forms.Button();
+            this.connectBtn = new System.Windows.Forms.Button();
             this.removeBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // connectBtn
-            // 
-            this.connectBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.connectBtn.Enabled = false;
-            this.connectBtn.Location = new System.Drawing.Point(498, 83);
-            this.connectBtn.Name = "connectBtn";
-            this.connectBtn.Size = new System.Drawing.Size(75, 25);
-            this.connectBtn.TabIndex = 5;
-            this.connectBtn.Text = "&Connect";
-            this.connectBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.connectBtn.UseVisualStyleBackColor = true;
             // 
             // savedUrlsListView
             // 
@@ -61,7 +49,7 @@
             this.savedUrlsListView.Location = new System.Drawing.Point(11, 52);
             this.savedUrlsListView.MultiSelect = false;
             this.savedUrlsListView.Name = "savedUrlsListView";
-            this.savedUrlsListView.Size = new System.Drawing.Size(481, 198);
+            this.savedUrlsListView.Size = new System.Drawing.Size(456, 198);
             this.savedUrlsListView.TabIndex = 3;
             this.savedUrlsListView.UseCompatibleStateImageBehavior = false;
             this.savedUrlsListView.View = System.Windows.Forms.View.Details;
@@ -69,7 +57,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "URL";
-            this.columnHeader1.Width = 475;
+            this.columnHeader1.Width = 450;
             // 
             // urlTextBox
             // 
@@ -78,28 +66,43 @@
             this.urlTextBox.Font = new System.Drawing.Font("Tahoma", 9F);
             this.urlTextBox.Location = new System.Drawing.Point(11, 12);
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(481, 22);
+            this.urlTextBox.Size = new System.Drawing.Size(456, 22);
             this.urlTextBox.TabIndex = 1;
             // 
             // addBtn
             // 
             this.addBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.addBtn.Location = new System.Drawing.Point(498, 11);
+            this.addBtn.Image = global::Neo4JHTTPBrowser.Properties.Resources.add_16;
+            this.addBtn.Location = new System.Drawing.Point(473, 11);
             this.addBtn.Name = "addBtn";
-            this.addBtn.Size = new System.Drawing.Size(75, 25);
+            this.addBtn.Size = new System.Drawing.Size(100, 25);
             this.addBtn.TabIndex = 2;
-            this.addBtn.Text = "&Add";
+            this.addBtn.Text = "&Add New";
             this.addBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.addBtn.UseVisualStyleBackColor = true;
+            // 
+            // connectBtn
+            // 
+            this.connectBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.connectBtn.Enabled = false;
+            this.connectBtn.Image = global::Neo4JHTTPBrowser.Properties.Resources.connected_16;
+            this.connectBtn.Location = new System.Drawing.Point(473, 83);
+            this.connectBtn.Name = "connectBtn";
+            this.connectBtn.Size = new System.Drawing.Size(100, 25);
+            this.connectBtn.TabIndex = 5;
+            this.connectBtn.Text = "&Connect";
+            this.connectBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.connectBtn.UseVisualStyleBackColor = true;
             // 
             // removeBtn
             // 
             this.removeBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.removeBtn.Enabled = false;
-            this.removeBtn.Location = new System.Drawing.Point(498, 52);
+            this.removeBtn.Image = global::Neo4JHTTPBrowser.Properties.Resources.trash_16;
+            this.removeBtn.Location = new System.Drawing.Point(473, 52);
             this.removeBtn.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
             this.removeBtn.Name = "removeBtn";
-            this.removeBtn.Size = new System.Drawing.Size(75, 25);
+            this.removeBtn.Size = new System.Drawing.Size(100, 25);
             this.removeBtn.TabIndex = 4;
             this.removeBtn.Text = "&Remove";
             this.removeBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;

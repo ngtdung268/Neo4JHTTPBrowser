@@ -72,7 +72,7 @@
             // newQueryMenuItem
             // 
             this.newQueryMenuItem.Enabled = false;
-            this.newQueryMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.Add16;
+            this.newQueryMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.file_16;
             this.newQueryMenuItem.Name = "newQueryMenuItem";
             this.newQueryMenuItem.Size = new System.Drawing.Size(101, 20);
             this.newQueryMenuItem.Text = "&NEW QUERY";
@@ -80,7 +80,7 @@
             // executeMenuItem
             // 
             this.executeMenuItem.Enabled = false;
-            this.executeMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.Play16;
+            this.executeMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.play_16;
             this.executeMenuItem.Name = "executeMenuItem";
             this.executeMenuItem.Size = new System.Drawing.Size(82, 20);
             this.executeMenuItem.Text = "&EXECUTE";

@@ -63,9 +63,9 @@ namespace Neo4JHTTPBrowser.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Add16 {
+        internal static System.Drawing.Bitmap add_16 {
             get {
-                object obj = ResourceManager.GetObject("Add16", resourceCulture);
+                object obj = ResourceManager.GetObject("add_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Neo4JHTTPBrowser.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Close16 {
+        internal static System.Drawing.Bitmap close_16 {
             get {
-                object obj = ResourceManager.GetObject("Close16", resourceCulture);
+                object obj = ResourceManager.GetObject("close_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace Neo4JHTTPBrowser.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap CloseHover16 {
+        internal static System.Drawing.Bitmap close_hover_16 {
             get {
-                object obj = ResourceManager.GetObject("CloseHover16", resourceCulture);
+                object obj = ResourceManager.GetObject("close_hover_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace Neo4JHTTPBrowser.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Play16 {
+        internal static System.Drawing.Bitmap code_file_16 {
             get {
-                object obj = ResourceManager.GetObject("Play16", resourceCulture);
+                object obj = ResourceManager.GetObject("code_file_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,119 @@ namespace Neo4JHTTPBrowser.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Remove16 {
+        internal static System.Drawing.Bitmap connect_16 {
             get {
-                object obj = ResourceManager.GetObject("Remove16", resourceCulture);
+                object obj = ResourceManager.GetObject("connect_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap connected_16 {
+            get {
+                object obj = ResourceManager.GetObject("connected_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap enter_16 {
+            get {
+                object obj = ResourceManager.GetObject("enter_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap file_16 {
+            get {
+                object obj = ResourceManager.GetObject("file_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder_16 {
+            get {
+                object obj = ResourceManager.GetObject("folder_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder_program_16 {
+            get {
+                object obj = ResourceManager.GetObject("folder_program_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap label_16 {
+            get {
+                object obj = ResourceManager.GetObject("label_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap loading_16 {
+            get {
+                object obj = ResourceManager.GetObject("loading_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logout_16 {
+            get {
+                object obj = ResourceManager.GetObject("logout_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap play_16 {
+            get {
+                object obj = ResourceManager.GetObject("play_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap script_16 {
+            get {
+                object obj = ResourceManager.GetObject("script_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap trash_16 {
+            get {
+                object obj = ResourceManager.GetObject("trash_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

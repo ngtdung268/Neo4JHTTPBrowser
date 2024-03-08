@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using Neo4JHTTPBrowser.Helpers;
+using System.Windows.Forms;
 
 namespace Neo4JHTTPBrowser.Controls
 {
@@ -16,6 +17,9 @@ namespace Neo4JHTTPBrowser.Controls
             Count = count;
 
             base.Text = ToString();
+
+            ImageKey = UIHelper.ObjectExplorerImageKeys.NodeLabel;
+            SelectedImageKey = UIHelper.ObjectExplorerImageKeys.NodeLabel;
 
             if (!string.IsNullOrEmpty(Label))
             {

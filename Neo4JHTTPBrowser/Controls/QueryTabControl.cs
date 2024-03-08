@@ -25,8 +25,8 @@ namespace Neo4JHTTPBrowser.Controls
         public QueryTabControl()
         {
             ImageList = new ImageList();
-            ImageList.Images.Add(Properties.Resources.Close16);
-            ImageList.Images.Add(Properties.Resources.CloseHover16);
+            ImageList.Images.Add(Properties.Resources.close_16);
+            ImageList.Images.Add(Properties.Resources.close_hover_16);
 
             DoubleBuffered = true;
             DrawMode = TabDrawMode.OwnerDrawFixed;
