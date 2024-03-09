@@ -48,7 +48,10 @@ namespace Neo4JHTTPBrowser.Controls
         {
             base.OnLoad(e);
 
-            SetupQueryEditor();
+            SetupQueryEditorStyle();
+
+            editor.KeyPress += OnEditorKeyPress;
+            editor.UpdateUI += OnEditorUpdateUI;
 
             ResetExecutionLabels("Ready");
         }
@@ -148,7 +151,7 @@ namespace Neo4JHTTPBrowser.Controls
             elapsedDelimiterLabel.Text = string.Empty;
         }
 
-        private void SetupQueryEditor()
+        private void SetupQueryEditorStyle()
         {
             editor.SetSelectionBackColor(true, Color.FromArgb(153, 201, 239));
 
@@ -196,8 +199,16 @@ namespace Neo4JHTTPBrowser.Controls
             margin.Width = 20;
             margin.Type = MarginType.Number;
             margin.Sensitive = true;
+        }
 
-            editor.UpdateUI += OnEditorUpdateUI;
+        private void OnEditorKeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar < 32)
+            {
+                // Prevent control characters from getting inserted into the text buffer.
+                e.Handled = true;
+                return;
+            }
         }
 
         // https://github.com/jacobslusser/ScintillaNET/wiki/Brace-Matching
@@ -241,9 +252,9 @@ namespace Neo4JHTTPBrowser.Controls
             }
         }
 
-        private static bool IsBrace(int c)
+        private static bool IsBrace(int character)
         {
-            switch (c)
+            switch (character)
             {
                 case '(':
                 case ')':

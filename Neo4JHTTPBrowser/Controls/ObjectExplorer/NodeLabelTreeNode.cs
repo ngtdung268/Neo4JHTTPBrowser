@@ -70,7 +70,7 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
         {
             rootWorkItem.EventTopics[CABEventTopics.QueryExecutionRequested].Fire(
                 this,
-                new QueryExecutionEventArgs($"MATCH (n:{Label}) RETURN n LIMIT 20"),
+                new CypherQueryEventArgs($"MATCH (n:{Label}) RETURN n LIMIT 20"),
                 rootWorkItem,
                 PublicationScope.Global
             );

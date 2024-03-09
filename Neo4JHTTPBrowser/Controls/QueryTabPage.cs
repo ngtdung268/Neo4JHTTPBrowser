@@ -8,6 +8,8 @@ namespace Neo4JHTTPBrowser.Controls
     {
         private readonly WorkItem rootWorkItem;
 
+        private const string UnsavedIndicator = "*";
+
         public QueryTabView View { get; private set; }
 
         public QueryTabPage(WorkItem rootWorkItem)

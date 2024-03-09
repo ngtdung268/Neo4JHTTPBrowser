@@ -1,6 +1,6 @@
 ﻿namespace Neo4JHTTPBrowser
 {
-    partial class ConnectionForm
+    partial class ConnectionDialog
     {
         /// <summary>
         /// Required designer variable.

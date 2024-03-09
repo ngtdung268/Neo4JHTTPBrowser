@@ -22,12 +22,22 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
             return Enumerable.Empty<MenuItem>();
         }
 
+        public virtual void OnBeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            return;
+        }
+
         public virtual void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.C)
             {
                 Clipboard.SetText(Text);
             }
+        }
+
+        public virtual void OnNodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            return;
         }
     }
 }

@@ -3,6 +3,7 @@ using Neo4JHTTPBrowser.Controls;
 using Neo4JHTTPBrowser.Controls.ObjectExplorer;
 using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
+using Neo4JHTTPBrowser.Properties;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,11 @@ namespace Neo4JHTTPBrowser
         private readonly WorkItem rootWorkItem;
         private readonly BackgroundWorker objectsLoadingWorker;
         private readonly ContextMenu objectExplorerContextMenu;
+        private readonly QueryTabControl queriesTabControl;
 
-        public MainForm([ServiceDependency] WorkItem workItem)
+        public MainForm([ServiceDependency] WorkItem rootWorkItem)
         {
-            rootWorkItem = workItem;
+            this.rootWorkItem = rootWorkItem;
 
             InitializeComponent();
 
@@ -36,6 +38,12 @@ namespace Neo4JHTTPBrowser
             newQueryMenuItem.Click += NewQueryMenuItem_Click;
             executeMenuItem.Click += ExecuteMenuItem_Click;
 
+            queriesTabControl = new QueryTabControl
+            {
+                Dock = DockStyle.Fill,
+                DrawMode = TabDrawMode.OwnerDrawFixed,
+                SupportCloseButton = true,
+            };
             queriesTabControl.SelectedIndexChanged += QueriesTabControl_SelectedIndexChanged;
 
             objectExplorerTreeView.BeforeExpand += ObjectExplorerTreeView_BeforeExpand;
@@ -44,13 +52,14 @@ namespace Neo4JHTTPBrowser
             objectExplorerTreeView.KeyDown += ObjectExplorerTreeView_KeyDown;
 
             var objectIcons = new ImageList();
-            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.Category, Properties.Resources.folder_16);
-            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.NodeLabel, Properties.Resources.label_16);
-            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.Procedure, Properties.Resources.code_file_16);
-            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.ProcedureMode, Properties.Resources.folder_program_16);
-            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelType, Properties.Resources.connect_16);
-            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelTypeIncoming, Properties.Resources.enter_16);
-            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelTypeOutgoing, Properties.Resources.logout_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.Category, Resources.folder_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.NodeLabel, Resources.label_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.Procedure, Resources.script_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.ProcedureMode, Resources.folder_program_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelType, Resources.connect_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelTypeIncoming, Resources.enter_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelTypeOutgoing, Resources.logout_16);
+            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.SavedQuery, Resources.code_file_16);
             objectExplorerTreeView.ImageList = objectIcons;
         }
 
@@ -70,7 +79,7 @@ namespace Neo4JHTTPBrowser
 
         private void SetupConnection()
         {
-            using (var connDialog = rootWorkItem.Items.AddNew<ConnectionForm>())
+            using (var connDialog = rootWorkItem.Items.AddNew<ConnectionDialog>())
             {
                 if (connDialog.ShowDialog() != DialogResult.OK)
                 {
@@ -126,6 +135,8 @@ namespace Neo4JHTTPBrowser
                 MessageBoxHelper.Error(this, Neo4JHelper.GetErrorText(response));
                 return;
             }
+
+            splitContainer.Panel2.Controls.Add(queriesTabControl);
 
             if (response.Results != null)
             {
@@ -225,10 +236,12 @@ namespace Neo4JHTTPBrowser
         {
             if (queriesTabControl.SelectedIndex == -1)
             {
+                queriesTabControl.Visible = false;
                 executeMenuItem.Enabled = false;
             }
             else
             {
+                queriesTabControl.Visible = true;
                 executeMenuItem.Enabled = true;
                 (queriesTabControl.SelectedTab as QueryTabPage).Focus();
             }
@@ -236,9 +249,9 @@ namespace Neo4JHTTPBrowser
 
         private void ObjectExplorerTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            if (e.Node is RelTypeGroupTreeNode node)
+            if (e.Node is BaseObjectTreeNode node)
             {
-                node.LoadRelationshipTypes();
+                node.OnBeforeExpand(sender, e);
             }
         }
 
@@ -262,13 +275,9 @@ namespace Neo4JHTTPBrowser
 
         private void ObjectExplorerTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (e.Node is ProcedureTreeNode node)
+            if (e.Node is BaseObjectTreeNode node)
             {
-                var query = $"-- {node.Procedure.Description}";
-                query += Environment.NewLine;
-                query += Environment.NewLine;
-                query += $"CALL {node.Procedure.Name}";
-                AddQueryTabPage(query, reuseCurrentBlankTab: true);
+                node.OnNodeMouseDoubleClick(sender, e);
             }
         }
 

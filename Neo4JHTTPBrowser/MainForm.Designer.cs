@@ -32,20 +32,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newQueryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.executeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
             this.objectExplorerTreeView = new System.Windows.Forms.TreeView();
-            this.objectExplorerHeaderLabel = new System.Windows.Forms.Label();
-            this.queriesTabControl = new Neo4JHTTPBrowser.Controls.QueryTabControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.objectExplorerHeaderLabel = new System.Windows.Forms.Label();
+            this.newQueryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.executeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
-            this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -69,22 +67,6 @@
             this.optionsMenuItem.Text = "&OPTIONS";
             this.optionsMenuItem.Visible = false;
             // 
-            // newQueryMenuItem
-            // 
-            this.newQueryMenuItem.Enabled = false;
-            this.newQueryMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.file_16;
-            this.newQueryMenuItem.Name = "newQueryMenuItem";
-            this.newQueryMenuItem.Size = new System.Drawing.Size(101, 20);
-            this.newQueryMenuItem.Text = "&NEW QUERY";
-            // 
-            // executeMenuItem
-            // 
-            this.executeMenuItem.Enabled = false;
-            this.executeMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.play_16;
-            this.executeMenuItem.Name = "executeMenuItem";
-            this.executeMenuItem.Size = new System.Drawing.Size(82, 20);
-            this.executeMenuItem.Text = "&EXECUTE";
-            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(57)))), ((int)(((byte)(85)))));
@@ -106,10 +88,6 @@
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.Controls.Add(this.panel2);
-            // 
-            // splitContainer.Panel2
-            // 
-            this.splitContainer.Panel2.Controls.Add(this.queriesTabControl);
             this.splitContainer.Size = new System.Drawing.Size(776, 529);
             this.splitContainer.SplitterDistance = 300;
             this.splitContainer.TabIndex = 0;
@@ -141,23 +119,29 @@
             this.objectExplorerHeaderLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(96)))), ((int)(((byte)(130)))));
             this.objectExplorerHeaderLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.objectExplorerHeaderLabel.ForeColor = System.Drawing.Color.White;
+            this.objectExplorerHeaderLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.objectExplorerHeaderLabel.Location = new System.Drawing.Point(1, 1);
             this.objectExplorerHeaderLabel.Name = "objectExplorerHeaderLabel";
             this.objectExplorerHeaderLabel.Size = new System.Drawing.Size(298, 25);
             this.objectExplorerHeaderLabel.TabIndex = 0;
-            this.objectExplorerHeaderLabel.Text = "Object Explorer";
+            this.objectExplorerHeaderLabel.Text = " Object Explorer";
             this.objectExplorerHeaderLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // queriesTabControl
+            // newQueryMenuItem
             // 
-            this.queriesTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.queriesTabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.queriesTabControl.Location = new System.Drawing.Point(0, 0);
-            this.queriesTabControl.Name = "queriesTabControl";
-            this.queriesTabControl.SelectedIndex = 0;
-            this.queriesTabControl.Size = new System.Drawing.Size(472, 529);
-            this.queriesTabControl.SupportCloseButton = true;
-            this.queriesTabControl.TabIndex = 0;
+            this.newQueryMenuItem.Enabled = false;
+            this.newQueryMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.file_16;
+            this.newQueryMenuItem.Name = "newQueryMenuItem";
+            this.newQueryMenuItem.Size = new System.Drawing.Size(101, 20);
+            this.newQueryMenuItem.Text = "&NEW QUERY";
+            // 
+            // executeMenuItem
+            // 
+            this.executeMenuItem.Enabled = false;
+            this.executeMenuItem.Image = global::Neo4JHTTPBrowser.Properties.Resources.play_16;
+            this.executeMenuItem.Name = "executeMenuItem";
+            this.executeMenuItem.Size = new System.Drawing.Size(82, 20);
+            this.executeMenuItem.Text = "&EXECUTE";
             // 
             // MainForm
             // 
@@ -178,7 +162,6 @@
             this.menuStrip.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
-            this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -198,7 +181,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label objectExplorerHeaderLabel;
         private System.Windows.Forms.TreeView objectExplorerTreeView;
-        private Neo4JHTTPBrowser.Controls.QueryTabControl queriesTabControl;
         private System.Windows.Forms.ToolTip toolTip;
     }
 }

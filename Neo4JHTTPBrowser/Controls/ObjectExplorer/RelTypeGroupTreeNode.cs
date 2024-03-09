@@ -40,21 +40,6 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
             };
         }
 
-        public override string ToString()
-        {
-            var result = GetGroupName();
-            if (isRelTypesLoaded)
-            {
-                result += $" ({Nodes.Count})";
-            }
-            return result;
-        }
-
-        private string GetGroupName()
-        {
-            return IsOutgoing ? "Outgoing Relationship Types" : "Incoming Relationship Types";
-        }
-
         public void LoadRelationshipTypes(bool reload = false)
         {
             if ((isRelTypesLoaded && !reload) || relTypesLoadingWorker.IsBusy)
@@ -154,12 +139,32 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
             LoadRelationshipTypes(reload: true);
         }
 
+        public override void OnBeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            LoadRelationshipTypes();
+        }
+
         public override void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.C)
             {
                 Clipboard.SetText(GetGroupName());
             }
+        }
+
+        public override string ToString()
+        {
+            var result = GetGroupName();
+            if (isRelTypesLoaded)
+            {
+                result += $" ({Nodes.Count})";
+            }
+            return result;
+        }
+
+        private string GetGroupName()
+        {
+            return IsOutgoing ? "Outgoing Relationship Types" : "Incoming Relationship Types";
         }
     }
 }

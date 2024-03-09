@@ -158,11 +158,11 @@
     <Compile Include="DTOs\ProcedureDTO.cs" />
     <Compile Include="DTOs\QueryRequestDTO.cs" />
     <Compile Include="DTOs\QueryResponseDTO.cs" />
-    <Compile Include="ConnectionForm.cs">
+    <Compile Include="ConnectionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConnectionForm.Designer.cs">
-      <DependentUpon>ConnectionForm.cs</DependentUpon>
+    <Compile Include="ConnectionDialog.Designer.cs">
+      <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ExceptionHelper.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
@@ -182,8 +182,8 @@
     <EmbeddedResource Include="Controls\QueryTabView.resx">
       <DependentUpon>QueryTabView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConnectionForm.resx">
-      <DependentUpon>ConnectionForm.cs</DependentUpon>
+    <EmbeddedResource Include="ConnectionDialog.resx">
+      <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -224,6 +224,7 @@
       <SubType>Component</SubType>
     </Content>
     <Content Include="Resources\add_16.png" />
+    <Content Include="Resources\globe_16.png" />
     <Content Include="Resources\IconWebsites.txt" />
     <Content Include="Resources\loading_16.gif" />
     <Content Include="Resources\code_file_16.png" />

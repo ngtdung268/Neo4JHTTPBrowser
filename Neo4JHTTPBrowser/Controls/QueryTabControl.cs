@@ -45,16 +45,38 @@ namespace Neo4JHTTPBrowser.Controls
 
         public QueryTabPage AddTabPage(string query = null, bool runQuery = false, bool reuseCurrentBlankTab = false, bool focusTab = false)
         {
-            QueryTabPage tabPage;
+            var tab = AddEmptyQueryTabPage(reuseCurrentBlankTab);
+
+            if (query != null)
+            {
+                tab.View.Query = query;
+            }
+
+            if (focusTab)
+            {
+                SelectedTab = tab;
+            }
+
+            if (runQuery)
+            {
+                tab.View.ExecuteQuery();
+            }
+
+            return tab;
+        }
+
+        private QueryTabPage AddEmptyQueryTabPage(bool reuseCurrentBlankTab = false)
+        {
+            QueryTabPage newTab;
             if (reuseCurrentBlankTab && SelectedTab != null && SelectedTab is QueryTabPage queryTabPage && string.IsNullOrWhiteSpace(queryTabPage.View.Query))
             {
-                tabPage = queryTabPage;
+                newTab = queryTabPage;
             }
             else
             {
                 currentTabNumber++;
 
-                tabPage = new QueryTabPage(RootWorkItem)
+                newTab = new QueryTabPage(RootWorkItem)
                 {
                     ImageIndex = 0,
                     Name = $"{nameof(QueryTabPage)}-{Guid.NewGuid()}",
@@ -63,25 +85,10 @@ namespace Neo4JHTTPBrowser.Controls
                     UseVisualStyleBackColor = true,
                 };
 
-                Controls.Add(tabPage);
+                Controls.Add(newTab);
             }
 
-            if (query != null)
-            {
-                tabPage.View.Query = query;
-            }
-
-            if (focusTab)
-            {
-                SelectedTab = tabPage;
-            }
-
-            if (runQuery)
-            {
-                tabPage.View.ExecuteQuery();
-            }
-
-            return tabPage;
+            return newTab;
         }
 
         private void OnDrawItem(object sender, DrawItemEventArgs e)
@@ -206,10 +213,19 @@ namespace Neo4JHTTPBrowser.Controls
             }
         }
 
+        [EventSubscription(CABEventTopics.QueryDisplayRequested)]
+        public void QueryDisplayRequestedHandler(object sender, EventArgs e)
+        {
+            if (e is CypherQueryEventArgs qe)
+            {
+                AddTabPage(qe.Query, runQuery: false, reuseCurrentBlankTab: true, focusTab: true);
+            }
+        }
+
         [EventSubscription(CABEventTopics.QueryExecutionRequested)]
         public void QueryExecutionRequestedHandler(object sender, EventArgs e)
         {
-            if (e is QueryExecutionEventArgs qe)
+            if (e is CypherQueryEventArgs qe)
             {
                 AddTabPage(qe.Query, runQuery: true, reuseCurrentBlankTab: true, focusTab: true);
             }

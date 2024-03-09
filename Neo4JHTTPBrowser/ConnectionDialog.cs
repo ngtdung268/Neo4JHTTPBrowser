@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace Neo4JHTTPBrowser
 {
-    public partial class ConnectionForm : Form
+    public partial class ConnectionDialog : Form
     {
         public string Url { get; private set; }
 
-        public ConnectionForm()
+        public ConnectionDialog()
         {
             InitializeComponent();
 

@@ -2,11 +2,11 @@
 
 namespace Neo4JHTTPBrowser.Helpers
 {
-    public class QueryExecutionEventArgs : EventArgs
+    public class CypherQueryEventArgs : EventArgs
     {
         public string Query { get; private set; }
 
-        public QueryExecutionEventArgs(string query)
+        public CypherQueryEventArgs(string query)
         {
             Query = query;
         }

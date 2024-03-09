@@ -58,7 +58,7 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
         {
             rootWorkItem.EventTopics[CABEventTopics.QueryExecutionRequested].Fire(
                 this,
-                new QueryExecutionEventArgs($"MATCH (s:{SourceNodeLabel})-[r:{RelationshipType}]->(t:{TargetNodeLabel}) RETURN s, t, r LIMIT 20"),
+                new CypherQueryEventArgs($"MATCH (s:{SourceNodeLabel})-[r:{RelationshipType}]->(t:{TargetNodeLabel}) RETURN s, t, r LIMIT 20"),
                 rootWorkItem,
                 PublicationScope.Global
             );
