@@ -110,9 +110,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\EmptyTreeNode.cs" />
-    <Compile Include="Controls\NodeLabelTreeNode.cs" />
-    <Compile Include="Controls\ProcedureTreeNode.cs" />
+    <Compile Include="Controls\ObjectExplorer\CategoryTreeNode.cs" />
+    <Compile Include="Controls\ObjectExplorer\EmptyTreeNode.cs" />
+    <Compile Include="Controls\ObjectExplorer\NodeLabelTreeNode.cs" />
+    <Compile Include="Controls\ObjectExplorer\BaseObjectTreeNode.cs" />
+    <Compile Include="Controls\ObjectExplorer\ProcedureTreeNode.cs" />
     <Compile Include="Controls\QueryJsonResultTabPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -134,8 +136,8 @@
     <Compile Include="Controls\QueryTabView.Designer.cs">
       <DependentUpon>QueryTabView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RelTypeGroupTreeNode.cs" />
-    <Compile Include="Controls\RelTypeTreeNode.cs" />
+    <Compile Include="Controls\ObjectExplorer\RelTypeGroupTreeNode.cs" />
+    <Compile Include="Controls\ObjectExplorer\RelTypeTreeNode.cs" />
     <Compile Include="Controls\TransparentPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -171,6 +173,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

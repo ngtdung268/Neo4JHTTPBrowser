@@ -37,7 +37,7 @@ namespace Neo4JHTTPBrowser.Controls
             MouseMove += OnMouseMove;
         }
 
-        public QueryTabPage AddTabPage(string query = null, bool selectTab = false)
+        public QueryTabPage AddTabPage(string query = null, bool runQuery = false, bool selectTab = false)
         {
             currentTabNumber++;
 
@@ -60,6 +60,11 @@ namespace Neo4JHTTPBrowser.Controls
             if (selectTab)
             {
                 SelectedTab = newTab;
+            }
+
+            if (runQuery)
+            {
+                newTab.View.ExecuteQuery();
             }
 
             return newTab;

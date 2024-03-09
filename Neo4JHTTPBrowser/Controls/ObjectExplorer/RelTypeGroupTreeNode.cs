@@ -1,14 +1,15 @@
 ﻿using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Neo4JHTTPBrowser.Controls
+namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
 {
-    internal class RelTypeGroupTreeNode : TreeNode
+    internal class RelTypeGroupTreeNode : BaseObjectTreeNode
     {
         public string NodeLabel { get; set; }
 
@@ -18,21 +19,12 @@ namespace Neo4JHTTPBrowser.Controls
 
         private bool isRelTypesLoaded = false;
         private readonly BackgroundWorker relTypesLoadingWorker;
+        private readonly List<MenuItem> contextMenuItems;
 
-        public RelTypeGroupTreeNode(string nodeLabel, bool isOutgoing)
+        public RelTypeGroupTreeNode(string nodeLabel, bool isOutgoing) : base(isOutgoing ? UIHelper.ObjectExplorerImageKeys.RelTypeOutgoing : UIHelper.ObjectExplorerImageKeys.RelTypeIncoming)
         {
             NodeLabel = nodeLabel;
             IsOutgoing = isOutgoing;
-
-            if (isOutgoing)
-            {
-                ImageKey = UIHelper.ObjectExplorerImageKeys.RelTypeOutgoing;
-            }
-            else
-            {
-                ImageKey = UIHelper.ObjectExplorerImageKeys.RelTypeIncoming;
-            }
-
             base.Text = ToString();
 
             Nodes.Add(new EmptyTreeNode());
@@ -40,11 +32,16 @@ namespace Neo4JHTTPBrowser.Controls
             relTypesLoadingWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
             relTypesLoadingWorker.DoWork += RelTypesLoadingWorker_DoWork;
             relTypesLoadingWorker.RunWorkerCompleted += RelTypesLoadingWorker_Completed;
+
+            contextMenuItems = new List<MenuItem>
+            {
+                new MenuItem("Refresh", RefreshItem_Click),
+            };
         }
 
         public override string ToString()
         {
-            var result = IsOutgoing ? "Outgoing Relationship Types" : "Incoming Relationship Types";
+            var result = GetGroupName();
             if (isRelTypesLoaded)
             {
                 result += $" ({Nodes.Count})";
@@ -52,9 +49,14 @@ namespace Neo4JHTTPBrowser.Controls
             return result;
         }
 
-        public void LoadRelationshipTypes()
+        private string GetGroupName()
         {
-            if (isRelTypesLoaded || relTypesLoadingWorker.IsBusy)
+            return IsOutgoing ? "Outgoing Relationship Types" : "Incoming Relationship Types";
+        }
+
+        public void LoadRelationshipTypes(bool reload = false)
+        {
+            if ((isRelTypesLoaded && !reload) || relTypesLoadingWorker.IsBusy)
             {
                 return;
             }
@@ -138,6 +140,24 @@ namespace Neo4JHTTPBrowser.Controls
             {
                 base.Text = ToString();
                 Expand();
+            }
+        }
+
+        public override IEnumerable<MenuItem> GetContextMenuItems()
+        {
+            return contextMenuItems ?? Enumerable.Empty<MenuItem>();
+        }
+
+        private void RefreshItem_Click(object sender, EventArgs e)
+        {
+            LoadRelationshipTypes(reload: true);
+        }
+
+        public override void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                Clipboard.SetText(GetGroupName());
             }
         }
     }

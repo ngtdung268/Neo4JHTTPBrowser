@@ -1,4 +1,5 @@
 ﻿using Neo4JHTTPBrowser.Controls;
+using Neo4JHTTPBrowser.Controls.ObjectExplorer;
 using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
 using Newtonsoft.Json.Linq;
@@ -16,6 +17,7 @@ namespace Neo4JHTTPBrowser
     public partial class MainForm : Form
     {
         private readonly BackgroundWorker objectsLoadingWorker;
+        private readonly ContextMenu objectExplorerContextMenu;
 
         public MainForm()
         {
@@ -25,12 +27,15 @@ namespace Neo4JHTTPBrowser
             objectsLoadingWorker.DoWork += ObjectsLoadingWorker_DoWork;
             objectsLoadingWorker.RunWorkerCompleted += ObjectsLoadingWorker_Completed;
 
+            objectExplorerContextMenu = new ContextMenu();
+
             newQueryMenuItem.Click += NewQueryMenuItem_Click;
             executeMenuItem.Click += ExecuteMenuItem_Click;
 
             queriesTabControl.SelectedIndexChanged += QueriesTabControl_SelectedIndexChanged;
 
             objectExplorerTreeView.BeforeExpand += ObjectExplorerTreeView_BeforeExpand;
+            objectExplorerTreeView.NodeMouseClick += ObjectExplorerTreeView_NodeMouseClick;
             objectExplorerTreeView.NodeMouseDoubleClick += ObjectExplorerTreeView_NodeMouseDoubleClick;
             objectExplorerTreeView.KeyDown += ObjectExplorerTreeView_KeyDown;
 
@@ -115,27 +120,23 @@ namespace Neo4JHTTPBrowser
                 var firstNodeLevelFont = new Font(DefaultFont, FontStyle.Bold);
                 var ObjectExplorerFirstNodeLevelForeColor = Color.Navy;
 
-                var nodeLabelsTreeNode = new TreeNode()
+                var nodeLabelsTreeNode = new CategoryTreeNode(UIHelper.ObjectExplorerImageKeys.Category)
                 {
                     ForeColor = ObjectExplorerFirstNodeLevelForeColor,
-                    ImageKey = UIHelper.ObjectExplorerImageKeys.Category,
                     NodeFont = firstNodeLevelFont,
-                    SelectedImageKey = UIHelper.ObjectExplorerImageKeys.Category,
                 };
                 objectExplorerTreeView.Nodes.Add(nodeLabelsTreeNode);
-                AddNodeLabelsToObjectExplorer(nodeLabelsTreeNode, response.Results[0]);
                 nodeLabelsTreeNode.Text = "Node Labels";
+                AddNodeLabelsToObjectExplorer(nodeLabelsTreeNode, response.Results[0]);
 
-                var proceduresTreeNode = new TreeNode()
+                var proceduresTreeNode = new CategoryTreeNode(UIHelper.ObjectExplorerImageKeys.Category)
                 {
                     ForeColor = ObjectExplorerFirstNodeLevelForeColor,
-                    ImageKey = UIHelper.ObjectExplorerImageKeys.Category,
                     NodeFont = firstNodeLevelFont,
-                    SelectedImageKey = UIHelper.ObjectExplorerImageKeys.Category,
                 };
                 objectExplorerTreeView.Nodes.Add(proceduresTreeNode);
-                AddProceduresToObjectExplorer(proceduresTreeNode, response.Results[1]);
                 proceduresTreeNode.Text = "Procedures";
+                AddProceduresToObjectExplorer(proceduresTreeNode, response.Results[1]);
             }
 
             MakeReadyToQuery();
@@ -167,10 +168,9 @@ namespace Neo4JHTTPBrowser
 
             foreach (var group in procedures.GroupBy(p => p.Mode).OrderBy(g => g.Key))
             {
-                var modeTreeNode = new TreeNode(group.Key)
+                var modeTreeNode = new CategoryTreeNode(UIHelper.ObjectExplorerImageKeys.ProcedureMode)
                 {
-                    ImageKey = UIHelper.ObjectExplorerImageKeys.ProcedureMode,
-                    SelectedImageKey = UIHelper.ObjectExplorerImageKeys.ProcedureMode
+                    Text = group.Key
                 };
                 parentNode.Nodes.Add(modeTreeNode);
 
@@ -230,6 +230,24 @@ namespace Neo4JHTTPBrowser
             }
         }
 
+        private void ObjectExplorerTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            objectExplorerTreeView.SelectedNode = e.Node;
+
+            if (e.Button == MouseButtons.Right && e.Node is BaseObjectTreeNode node)
+            {
+                var menuItems = node.GetContextMenuItems();
+                if (menuItems == null || !menuItems.Any())
+                {
+                    return;
+                }
+
+                objectExplorerContextMenu.MenuItems.Clear();
+                objectExplorerContextMenu.MenuItems.AddRange(menuItems.ToArray());
+                objectExplorerContextMenu.Show(objectExplorerTreeView, e.Location);
+            }
+        }
+
         private void ObjectExplorerTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Node is ProcedureTreeNode node)
@@ -253,11 +271,11 @@ namespace Neo4JHTTPBrowser
 
         private void ObjectExplorerTreeView_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.C && objectExplorerTreeView.SelectedNode != null)
+            if (objectExplorerTreeView.SelectedNode != null && objectExplorerTreeView.SelectedNode is BaseObjectTreeNode node)
             {
                 e.Handled = true;
                 e.SuppressKeyPress = true;
-                Clipboard.SetText(objectExplorerTreeView.SelectedNode.Text);
+                node.OnKeyDown(sender, e);
             }
         }
     }
