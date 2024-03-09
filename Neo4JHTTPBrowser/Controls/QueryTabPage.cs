@@ -1,17 +1,22 @@
-﻿using System;
+﻿using Microsoft.Practices.CompositeUI;
+using System;
 using System.Windows.Forms;
 
 namespace Neo4JHTTPBrowser.Controls
 {
     internal class QueryTabPage : TabPage
     {
+        private readonly WorkItem rootWorkItem;
+
         public QueryTabView View { get; private set; }
 
-        public QueryTabPage()
+        public QueryTabPage(WorkItem rootWorkItem)
         {
+            this.rootWorkItem = rootWorkItem;
+
             Name = $"{nameof(QueryTabPage)}-{Guid.NewGuid()}";
 
-            View = new QueryTabView
+            View = new QueryTabView(rootWorkItem)
             {
                 Dock = DockStyle.Fill,
                 TabIndex = 0,

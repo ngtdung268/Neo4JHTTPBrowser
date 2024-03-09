@@ -1,4 +1,6 @@
-﻿using Neo4JHTTPBrowser.Helpers;
+﻿using Microsoft.Practices.CompositeUI;
+using Microsoft.Practices.CompositeUI.EventBroker;
+using Neo4JHTTPBrowser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,7 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
 
         private readonly List<MenuItem> contextMenuItems;
 
-        public RelTypeTreeNode(string sourceNodeLabel, string targetNodeLabel, string relationshipType) : base(UIHelper.ObjectExplorerImageKeys.RelType)
+        public RelTypeTreeNode(WorkItem workItem, string sourceNodeLabel, string targetNodeLabel, string relationshipType) : base(workItem, UIHelper.ObjectExplorerImageKeys.RelType)
         {
             SourceNodeLabel = sourceNodeLabel;
             TargetNodeLabel = targetNodeLabel;
@@ -28,7 +30,7 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
             contextMenuItems = new List<MenuItem>
             {
                 new MenuItem("Copy", CopyTextItem_Click),
-                new MenuItem("View First 100", ViewFirst100Item_Click)
+                new MenuItem("View First 20", ViewFirst20Item_Click)
             };
         }
 
@@ -52,9 +54,14 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
             Clipboard.SetText(GetRelTypeRepr());
         }
 
-        private void ViewFirst100Item_Click(object sender, EventArgs e)
+        private void ViewFirst20Item_Click(object sender, EventArgs e)
         {
-            // TODO: Add CAB?
+            rootWorkItem.EventTopics[CABEventTopics.QueryExecutionRequested].Fire(
+                this,
+                new QueryExecutionEventArgs($"MATCH (s:{SourceNodeLabel})-[r:{RelationshipType}]->(t:{TargetNodeLabel}) RETURN s, t, r LIMIT 20"),
+                rootWorkItem,
+                PublicationScope.Global
+            );
         }
 
         public override void OnKeyDown(object sender, KeyEventArgs e)

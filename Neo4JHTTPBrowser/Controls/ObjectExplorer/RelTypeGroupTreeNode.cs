@@ -1,4 +1,5 @@
-﻿using Neo4JHTTPBrowser.DTOs;
+﻿using Microsoft.Practices.CompositeUI;
+using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
@@ -21,7 +22,7 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
         private readonly BackgroundWorker relTypesLoadingWorker;
         private readonly List<MenuItem> contextMenuItems;
 
-        public RelTypeGroupTreeNode(string nodeLabel, bool isOutgoing) : base(isOutgoing ? UIHelper.ObjectExplorerImageKeys.RelTypeOutgoing : UIHelper.ObjectExplorerImageKeys.RelTypeIncoming)
+        public RelTypeGroupTreeNode(WorkItem workItem, string nodeLabel, bool isOutgoing) : base(workItem, isOutgoing ? UIHelper.ObjectExplorerImageKeys.RelTypeOutgoing : UIHelper.ObjectExplorerImageKeys.RelTypeIncoming)
         {
             NodeLabel = nodeLabel;
             IsOutgoing = isOutgoing;
@@ -83,7 +84,7 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
                 }
             };
 
-            e.Result = Neo4JApiService.Instance.QueryAsync(payload).Result;
+            e.Result = rootWorkItem.Services.Get<Neo4JApiService>().QueryAsync(payload).Result;
             isRelTypesLoaded = true;
         }
 
@@ -121,11 +122,11 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
                             {
                                 if (IsOutgoing)
                                 {
-                                    relTypeNodes.Add(new RelTypeTreeNode(NodeLabel, label, type));
+                                    relTypeNodes.Add(new RelTypeTreeNode(rootWorkItem, NodeLabel, label, type));
                                 }
                                 else
                                 {
-                                    relTypeNodes.Add(new RelTypeTreeNode(label, NodeLabel, type));
+                                    relTypeNodes.Add(new RelTypeTreeNode(rootWorkItem, label, NodeLabel, type));
                                 }
                             }
                         }

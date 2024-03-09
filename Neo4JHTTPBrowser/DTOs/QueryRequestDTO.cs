@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Neo4JHTTPBrowser.DTOs
 {
-    internal class QueryRequestDTO
+    public class QueryRequestDTO
     {
         [JsonProperty("statements")]
         public List<StatementDTO> Statements { get; set; }
 
-        internal class StatementDTO
+        public class StatementDTO
         {
             [JsonProperty("statement")]
             public string Statement { get; set; }

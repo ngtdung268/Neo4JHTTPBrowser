@@ -1,4 +1,5 @@
-﻿using Neo4JHTTPBrowser.Controls;
+﻿using Microsoft.Practices.CompositeUI;
+using Neo4JHTTPBrowser.Controls;
 using Neo4JHTTPBrowser.Controls.ObjectExplorer;
 using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
@@ -16,11 +17,14 @@ namespace Neo4JHTTPBrowser
 {
     public partial class MainForm : Form
     {
+        private readonly WorkItem rootWorkItem;
         private readonly BackgroundWorker objectsLoadingWorker;
         private readonly ContextMenu objectExplorerContextMenu;
 
-        public MainForm()
+        public MainForm([ServiceDependency] WorkItem workItem)
         {
+            rootWorkItem = workItem;
+
             InitializeComponent();
 
             objectsLoadingWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
@@ -50,6 +54,14 @@ namespace Neo4JHTTPBrowser
             objectExplorerTreeView.ImageList = objectIcons;
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            rootWorkItem.SmartParts.Add(objectExplorerTreeView);
+            rootWorkItem.SmartParts.Add(queriesTabControl);
+        }
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
@@ -58,7 +70,7 @@ namespace Neo4JHTTPBrowser
 
         private void SetupConnection()
         {
-            using (var connDialog = new ConnectionForm())
+            using (var connDialog = rootWorkItem.Items.AddNew<ConnectionForm>())
             {
                 if (connDialog.ShowDialog() != DialogResult.OK)
                 {
@@ -88,7 +100,7 @@ namespace Neo4JHTTPBrowser
                 }
             };
 
-            e.Result = Neo4JApiService.Instance.QueryAsync(payload).Result;
+            e.Result = rootWorkItem.Services.Get<Neo4JApiService>().QueryAsync(payload).Result;
         }
 
         private void ObjectsLoadingWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
@@ -120,7 +132,7 @@ namespace Neo4JHTTPBrowser
                 var firstNodeLevelFont = new Font(DefaultFont, FontStyle.Bold);
                 var ObjectExplorerFirstNodeLevelForeColor = Color.Navy;
 
-                var nodeLabelsTreeNode = new CategoryTreeNode(UIHelper.ObjectExplorerImageKeys.Category)
+                var nodeLabelsTreeNode = new CategoryTreeNode(rootWorkItem, UIHelper.ObjectExplorerImageKeys.Category)
                 {
                     ForeColor = ObjectExplorerFirstNodeLevelForeColor,
                     NodeFont = firstNodeLevelFont,
@@ -129,7 +141,7 @@ namespace Neo4JHTTPBrowser
                 nodeLabelsTreeNode.Text = "Node Labels";
                 AddNodeLabelsToObjectExplorer(nodeLabelsTreeNode, response.Results[0]);
 
-                var proceduresTreeNode = new CategoryTreeNode(UIHelper.ObjectExplorerImageKeys.Category)
+                var proceduresTreeNode = new CategoryTreeNode(rootWorkItem, UIHelper.ObjectExplorerImageKeys.Category)
                 {
                     ForeColor = ObjectExplorerFirstNodeLevelForeColor,
                     NodeFont = firstNodeLevelFont,
@@ -148,7 +160,7 @@ namespace Neo4JHTTPBrowser
 
             foreach (var item in Neo4JHelper.GetRows(result))
             {
-                nodes.Add(new NodeLabelTreeNode((item["LABELS"] as JArray)?.FirstOrDefault()?.ToString(), Convert.ToInt32(item["COUNT"])));
+                nodes.Add(new NodeLabelTreeNode(rootWorkItem, (item["LABELS"] as JArray)?.FirstOrDefault()?.ToString(), Convert.ToInt32(item["COUNT"])));
             }
 
             nodes = nodes.OrderBy(n => n.Text).ToList();
@@ -168,7 +180,7 @@ namespace Neo4JHTTPBrowser
 
             foreach (var group in procedures.GroupBy(p => p.Mode).OrderBy(g => g.Key))
             {
-                var modeTreeNode = new CategoryTreeNode(UIHelper.ObjectExplorerImageKeys.ProcedureMode)
+                var modeTreeNode = new CategoryTreeNode(rootWorkItem, UIHelper.ObjectExplorerImageKeys.ProcedureMode)
                 {
                     Text = group.Key
                 };
@@ -176,7 +188,7 @@ namespace Neo4JHTTPBrowser
 
                 foreach (var item in group.OrderBy(i => i.Name))
                 {
-                    modeTreeNode.Nodes.Add(new ProcedureTreeNode(item));
+                    modeTreeNode.Nodes.Add(new ProcedureTreeNode(rootWorkItem, item));
                 }
             }
 
@@ -195,9 +207,9 @@ namespace Neo4JHTTPBrowser
             AddQueryTabPage();
         }
 
-        private void AddQueryTabPage(string query = null)
+        private void AddQueryTabPage(string query = null, bool reuseCurrentBlankTab = false, bool focusTab = true)
         {
-            queriesTabControl.AddTabPage(query, selectTab: true);
+            queriesTabControl.AddTabPage(query, reuseCurrentBlankTab: reuseCurrentBlankTab, focusTab: focusTab);
             QueriesTabControl_SelectedIndexChanged(this, EventArgs.Empty);
         }
 
@@ -256,16 +268,7 @@ namespace Neo4JHTTPBrowser
                 query += Environment.NewLine;
                 query += Environment.NewLine;
                 query += $"CALL {node.Procedure.Name}";
-
-                if (queriesTabControl.SelectedTab != null && queriesTabControl.SelectedTab is QueryTabPage page && string.IsNullOrWhiteSpace(page.View.Query))
-                {
-                    page.View.Query = query;
-                    page.Focus();
-                }
-                else
-                {
-                    AddQueryTabPage(query);
-                }
+                AddQueryTabPage(query, reuseCurrentBlankTab: true);
             }
         }
 

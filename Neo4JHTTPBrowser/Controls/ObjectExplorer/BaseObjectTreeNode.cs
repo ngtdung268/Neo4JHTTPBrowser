@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Practices.CompositeUI;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -6,8 +7,12 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
 {
     internal abstract class BaseObjectTreeNode : TreeNode
     {
-        public BaseObjectTreeNode(string imageKey)
+        protected WorkItem rootWorkItem;
+
+        public BaseObjectTreeNode(WorkItem workItem, string imageKey)
         {
+            rootWorkItem = workItem;
+
             ImageKey = imageKey;
             SelectedImageKey = imageKey;
         }

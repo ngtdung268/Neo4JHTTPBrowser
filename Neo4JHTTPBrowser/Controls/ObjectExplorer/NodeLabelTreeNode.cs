@@ -1,4 +1,6 @@
-﻿using Neo4JHTTPBrowser.Helpers;
+﻿using Microsoft.Practices.CompositeUI;
+using Microsoft.Practices.CompositeUI.EventBroker;
+using Neo4JHTTPBrowser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +10,17 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
 {
     internal class NodeLabelTreeNode : BaseObjectTreeNode
     {
+        private readonly RelTypeGroupTreeNode incomingRelTypeGroupNode;
+        private readonly RelTypeGroupTreeNode outgoingRelTypeGroupNode;
+        private readonly List<MenuItem> contextMenuItems;
+
         public string Label { get; set; }
 
         public int Count { get; set; }
 
         public new string Text => ToString();
 
-        private readonly RelTypeGroupTreeNode incomingRelTypeGroupNode;
-        private readonly RelTypeGroupTreeNode outgoingRelTypeGroupNode;
-        private readonly List<MenuItem> contextMenuItems;
-
-        public NodeLabelTreeNode(string label, int count) : base(UIHelper.ObjectExplorerImageKeys.NodeLabel)
+        public NodeLabelTreeNode(WorkItem workItem, string label, int count) : base(workItem, UIHelper.ObjectExplorerImageKeys.NodeLabel)
         {
             Label = label?.Trim();
             Count = count;
@@ -26,17 +28,19 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
 
             if (!string.IsNullOrEmpty(Label))
             {
-                incomingRelTypeGroupNode = new RelTypeGroupTreeNode(Label, false);
+                incomingRelTypeGroupNode = new RelTypeGroupTreeNode(rootWorkItem, Label, false);
                 Nodes.Add(incomingRelTypeGroupNode);
+                rootWorkItem.Items.Add(incomingRelTypeGroupNode);
 
-                outgoingRelTypeGroupNode = new RelTypeGroupTreeNode(Label, true);
+                outgoingRelTypeGroupNode = new RelTypeGroupTreeNode(rootWorkItem, Label, true);
                 Nodes.Add(outgoingRelTypeGroupNode);
+                rootWorkItem.Items.Add(outgoingRelTypeGroupNode);
 
                 contextMenuItems = new List<MenuItem>
                 {
                     new MenuItem("Copy", CopyTextItem_Click),
                     new MenuItem("Refresh", RefreshItem_Click),
-                    new MenuItem("View First 100", ViewFirst100Item_Click)
+                    new MenuItem("View First 20", ViewFirst20Item_Click)
                 };
             }
         }
@@ -62,9 +66,14 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
             outgoingRelTypeGroupNode?.LoadRelationshipTypes(reload: true);
         }
 
-        private void ViewFirst100Item_Click(object sender, EventArgs e)
+        private void ViewFirst20Item_Click(object sender, EventArgs e)
         {
-            // TODO: Add CAB?
+            rootWorkItem.EventTopics[CABEventTopics.QueryExecutionRequested].Fire(
+                this,
+                new QueryExecutionEventArgs($"MATCH (n:{Label}) RETURN n LIMIT 20"),
+                rootWorkItem,
+                PublicationScope.Global
+            );
         }
 
         public override void OnKeyDown(object sender, KeyEventArgs e)

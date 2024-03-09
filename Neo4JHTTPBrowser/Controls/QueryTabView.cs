@@ -1,4 +1,5 @@
-﻿using Neo4JHTTPBrowser.DTOs;
+﻿using Microsoft.Practices.CompositeUI;
+using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
 using ScintillaNET;
 using System;
@@ -13,6 +14,8 @@ namespace Neo4JHTTPBrowser.Controls
 {
     public partial class QueryTabView : UserControl
     {
+        private readonly WorkItem rootWorkItem;
+
         private readonly BackgroundWorker executionWorker;
 
         private int editorLastCaretPosition = 0;
@@ -30,8 +33,10 @@ namespace Neo4JHTTPBrowser.Controls
             }
         }
 
-        public QueryTabView()
+        public QueryTabView(WorkItem rootWorkItem)
         {
+            this.rootWorkItem = rootWorkItem;
+
             InitializeComponent();
 
             executionWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
@@ -105,7 +110,7 @@ namespace Neo4JHTTPBrowser.Controls
             var payload = e.Argument as QueryRequestDTO;
 
             var stopwatch = Stopwatch.StartNew();
-            var response = Neo4JApiService.Instance.QueryAsync(payload).Result;
+            var response = rootWorkItem.Services.Get<Neo4JApiService>().QueryAsync(payload).Result;
             var elapsed = stopwatch.Elapsed;
 
             e.Result = Tuple.Create(response, elapsed);

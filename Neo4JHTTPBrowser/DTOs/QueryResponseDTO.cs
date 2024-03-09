@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Neo4JHTTPBrowser.DTOs
 {
-    internal class QueryResponseDTO
+    public class QueryResponseDTO
     {
         [JsonProperty("results")]
         public List<ResultDTO> Results { get; set; }
@@ -14,7 +14,7 @@ namespace Neo4JHTTPBrowser.DTOs
         [JsonProperty("lastBookmarks")]
         public List<string> LastBookmarks { get; set; }
 
-        internal class ResultDTO
+        public class ResultDTO
         {
             [JsonProperty("columns")]
             public List<string> Columns { get; set; }
@@ -26,7 +26,7 @@ namespace Neo4JHTTPBrowser.DTOs
             public Dictionary<string, Dictionary<string, object>> Plan { get; set; }
         }
 
-        internal class ResultDataDTO
+        public class ResultDataDTO
         {
             [JsonProperty("row")]
             public List<object> Row { get; set; }
@@ -35,7 +35,7 @@ namespace Neo4JHTTPBrowser.DTOs
             public List<ResultDataMetaDTO> Meta { get; set; }
         }
 
-        internal class ResultDataMetaDTO
+        public class ResultDataMetaDTO
         {
             [JsonProperty("id")]
             public int Id { get; set; }
@@ -50,7 +50,7 @@ namespace Neo4JHTTPBrowser.DTOs
             public bool Deleted { get; set; }
         }
 
-        internal class ErrorDTO
+        public class ErrorDTO
         {
             [JsonProperty("code")]
             public string Code { get; set; }

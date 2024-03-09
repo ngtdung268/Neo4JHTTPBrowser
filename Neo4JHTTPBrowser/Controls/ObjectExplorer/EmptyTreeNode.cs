@@ -4,7 +4,7 @@
     {
         public new string Text => string.Empty;
 
-        public EmptyTreeNode() : base(null)
+        public EmptyTreeNode() : base(null, null)
         {
             base.Text = string.Empty;
         }

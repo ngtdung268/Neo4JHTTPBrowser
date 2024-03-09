@@ -1,4 +1,6 @@
-﻿using Neo4JHTTPBrowser.Helpers;
+﻿using Microsoft.Practices.CompositeUI;
+using Microsoft.Practices.CompositeUI.WinForms;
+using Neo4JHTTPBrowser.Helpers;
 using Neo4JHTTPBrowser.Properties;
 using System;
 using System.Net;
@@ -7,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Neo4JHTTPBrowser
 {
-    internal static class Program
+    class Program : FormShellApplication<WorkItem, MainForm>
     {
         /// <summary>
         /// The main entry point for the application.
@@ -30,9 +32,7 @@ namespace Neo4JHTTPBrowser
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             }
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            new Program().Run();
         }
 
         private static void AppDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

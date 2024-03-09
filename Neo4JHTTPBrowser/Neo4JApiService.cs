@@ -1,4 +1,5 @@
-﻿using Neo4JHTTPBrowser.DTOs;
+﻿using Microsoft.Practices.CompositeUI;
+using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
 using Neo4JHTTPBrowser.Properties;
 using Newtonsoft.Json;
@@ -17,7 +18,8 @@ using System.Threading.Tasks;
 
 namespace Neo4JHTTPBrowser
 {
-    internal sealed class Neo4JApiService
+    [Service(typeof(Neo4JApiService))]
+    public class Neo4JApiService
     {
         private readonly RestClient client;
 
@@ -32,14 +34,10 @@ namespace Neo4JHTTPBrowser
             HttpStatusCode.GatewayTimeout
         };
 
-        private static readonly Neo4JApiService instance = new Neo4JApiService();
-
-        private Neo4JApiService()
+        public Neo4JApiService()
         {
             client = CreateClient();
         }
-
-        public static Neo4JApiService Instance => instance;
 
         public Task<QueryResponseDTO> QueryAsync(QueryRequestDTO payload)
         {

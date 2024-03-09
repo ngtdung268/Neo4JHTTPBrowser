@@ -1,4 +1,5 @@
-﻿using Neo4JHTTPBrowser.DTOs;
+﻿using Microsoft.Practices.CompositeUI;
+using Neo4JHTTPBrowser.DTOs;
 using Neo4JHTTPBrowser.Helpers;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
 
         private readonly List<MenuItem> contextMenuItems;
 
-        public ProcedureTreeNode(ProcedureDTO procedure) : base(UIHelper.ObjectExplorerImageKeys.Procedure)
+        public ProcedureTreeNode(WorkItem workItem, ProcedureDTO procedure) : base(workItem, UIHelper.ObjectExplorerImageKeys.Procedure)
         {
             Procedure = procedure;
             ToolTipText = Procedure?.Description;

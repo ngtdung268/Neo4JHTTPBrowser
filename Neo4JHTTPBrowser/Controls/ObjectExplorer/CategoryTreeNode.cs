@@ -1,8 +1,10 @@
-﻿namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
+﻿using Microsoft.Practices.CompositeUI;
+
+namespace Neo4JHTTPBrowser.Controls.ObjectExplorer
 {
     internal class CategoryTreeNode : BaseObjectTreeNode
     {
-        public CategoryTreeNode(string imageKey) : base(imageKey)
+        public CategoryTreeNode(WorkItem workItem, string imageKey) : base(workItem, imageKey)
         {
         }
     }

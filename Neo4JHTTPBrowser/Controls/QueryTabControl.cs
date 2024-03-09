@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Practices.CompositeUI;
+using Microsoft.Practices.CompositeUI.EventBroker;
+using Neo4JHTTPBrowser.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -22,6 +25,9 @@ namespace Neo4JHTTPBrowser.Controls
         [Description("Indicate when this workspace is supported close button."), Category("Appearance")]
         public bool SupportCloseButton { get; set; }
 
+        [ServiceDependency]
+        public WorkItem RootWorkItem { get; set; }
+
         public QueryTabControl()
         {
             ImageList = new ImageList();
@@ -37,37 +43,45 @@ namespace Neo4JHTTPBrowser.Controls
             MouseMove += OnMouseMove;
         }
 
-        public QueryTabPage AddTabPage(string query = null, bool runQuery = false, bool selectTab = false)
+        public QueryTabPage AddTabPage(string query = null, bool runQuery = false, bool reuseCurrentBlankTab = false, bool focusTab = false)
         {
-            currentTabNumber++;
-
-            var newTab = new QueryTabPage
+            QueryTabPage tabPage;
+            if (reuseCurrentBlankTab && SelectedTab != null && SelectedTab is QueryTabPage queryTabPage && string.IsNullOrWhiteSpace(queryTabPage.View.Query))
             {
-                ImageIndex = 0,
-                Name = $"{nameof(QueryTabPage)}-{Guid.NewGuid()}",
-                TabIndex = currentTabNumber,
-                Text = $"Query {currentTabNumber}",
-                UseVisualStyleBackColor = true,
-            };
+                tabPage = queryTabPage;
+            }
+            else
+            {
+                currentTabNumber++;
+
+                tabPage = new QueryTabPage(RootWorkItem)
+                {
+                    ImageIndex = 0,
+                    Name = $"{nameof(QueryTabPage)}-{Guid.NewGuid()}",
+                    TabIndex = currentTabNumber,
+                    Text = $"Query {currentTabNumber}",
+                    UseVisualStyleBackColor = true,
+                };
+
+                Controls.Add(tabPage);
+            }
 
             if (query != null)
             {
-                newTab.View.Query = query;
+                tabPage.View.Query = query;
             }
 
-            Controls.Add(newTab);
-
-            if (selectTab)
+            if (focusTab)
             {
-                SelectedTab = newTab;
+                SelectedTab = tabPage;
             }
 
             if (runQuery)
             {
-                newTab.View.ExecuteQuery();
+                tabPage.View.ExecuteQuery();
             }
 
-            return newTab;
+            return tabPage;
         }
 
         private void OnDrawItem(object sender, DrawItemEventArgs e)
@@ -189,6 +203,15 @@ namespace Neo4JHTTPBrowser.Controls
                         return;
                     }
                 }
+            }
+        }
+
+        [EventSubscription(CABEventTopics.QueryExecutionRequested)]
+        public void QueryExecutionRequestedHandler(object sender, EventArgs e)
+        {
+            if (e is QueryExecutionEventArgs qe)
+            {
+                AddTabPage(qe.Query, runQuery: true, reuseCurrentBlankTab: true, focusTab: true);
             }
         }
     }
