@@ -59,7 +59,6 @@ namespace Neo4JHTTPBrowser
             objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelType, Resources.connect_16);
             objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelTypeIncoming, Resources.enter_16);
             objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.RelTypeOutgoing, Resources.logout_16);
-            objectIcons.Images.Add(UIHelper.ObjectExplorerImageKeys.SavedQuery, Resources.code_file_16);
             objectExplorerTreeView.ImageList = objectIcons;
         }
 
