@@ -21,8 +21,6 @@ namespace Neo4JHTTPBrowser
     [Service(typeof(Neo4JApiService))]
     public class Neo4JApiService
     {
-        private readonly RestClient client;
-
         private AsyncRetryPolicy<RestResponse> waitAndRetryPolicy;
         private const int RetryCount = 6;
         private static readonly long MaxDelayTicks = TimeSpan.FromSeconds(30).Ticks;
@@ -34,40 +32,48 @@ namespace Neo4JHTTPBrowser
             HttpStatusCode.GatewayTimeout
         };
 
+        private RestClient _client = null;
+        private RestClient Client
+        {
+            get
+            {
+                if (_client == null)
+                {
+                    var options = new RestClientOptions(Settings.Default.Neo4JBaseUrl)
+                    {
+                        RemoteCertificateValidationCallback = (sender, cert, chain, sslPolicyErrors) => true,
+                        ThrowOnAnyError = true,
+                        UserAgent = $"{Assembly.GetEntryAssembly().GetName().Name} ({Assembly.GetEntryAssembly().GetName().Version})"
+                    };
+
+                    var jsonSerializerSettings = new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                        DefaultValueHandling = DefaultValueHandling.Include,
+                        TypeNameHandling = TypeNameHandling.None,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        Formatting = Formatting.None,
+                        ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+                    };
+
+                    _client = new RestClient(
+                        options,
+                        configureSerialization: s => s.UseNewtonsoftJson(jsonSerializerSettings)
+                    );
+                }
+
+                return _client;
+            }
+        }
+
         public Neo4JApiService()
         {
-            client = CreateClient();
         }
 
         public Task<QueryResponseDTO> QueryAsync(QueryRequestDTO payload)
         {
             var request = CreatePostRequest("db/neo4j/tx/commit", payload);
             return ExecuteWithRetryAsync<QueryResponseDTO>(request);
-        }
-
-        private static RestClient CreateClient()
-        {
-            var options = new RestClientOptions(Settings.Default.Neo4JBaseUrl)
-            {
-                RemoteCertificateValidationCallback = (sender, cert, chain, sslPolicyErrors) => true,
-                ThrowOnAnyError = true,
-                UserAgent = $"{Assembly.GetEntryAssembly().GetName().Name} ({Assembly.GetEntryAssembly().GetName().Version})"
-            };
-
-            var jsonSerializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                DefaultValueHandling = DefaultValueHandling.Include,
-                TypeNameHandling = TypeNameHandling.None,
-                NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Formatting.None,
-                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-            };
-
-            return new RestClient(
-                options,
-                configureSerialization: s => s.UseNewtonsoftJson(jsonSerializerSettings)
-            );
         }
 
         private static RestRequest CreateGetRequest(string path, Dictionary<string, object> queryParams = null)
@@ -105,9 +111,9 @@ namespace Neo4JHTTPBrowser
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var response = await client.ExecuteAsync<T>(request);
+            var response = await Client.ExecuteAsync<T>(request);
 
-            Trace(client, request, response);
+            Trace(Client, request, response);
 
             return response?.Data;
         }
@@ -117,7 +123,7 @@ namespace Neo4JHTTPBrowser
         {
             var retryPolicy = GetWaitAndRetryPolicy();
 
-            var restResponse = await retryPolicy.ExecuteAsync(async () => await client.ExecuteAsync<T>(request));
+            var restResponse = await retryPolicy.ExecuteAsync(async () => await Client.ExecuteAsync<T>(request));
             if (restResponse == null)
             {
                 return null;
@@ -130,7 +136,7 @@ namespace Neo4JHTTPBrowser
             }
             finally
             {
-                Trace(client, request, restResponse);
+                Trace(Client, request, restResponse);
             }
         }
 
